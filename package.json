@@ -1,0 +1,25 @@
+{
+  "name": "remote-chess-engine",
+  "version": "0.1.0",
+  "description": "Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)",
+  "main": "main.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "keywords": [
+    "chess",
+    "fen",
+    "analysis",
+    "positions",
+    "ricpa",
+    "engine",
+    "remote",
+    "interface"
+  ],
+  "author": "Mikhail Subach",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.11.0",
+    "jasmine": "^2.8.0"
+  }
+}
