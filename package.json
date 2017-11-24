@@ -23,7 +23,8 @@
   "devDependencies": {
     "eslint": "^4.11.0",
     "jasmine": "^2.8.0",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "uci": "github:Scorpibear/uci"
   },
   "repository": {
     "type": "git",
