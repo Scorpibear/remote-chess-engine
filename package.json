@@ -21,16 +21,19 @@
   "author": "Mikhail Subach",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^4.11.0",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
     "jasmine": "^2.8.0",
     "nodemon": "^1.12.1",
-    "uci": "github:Scorpibear/uci"
+    "supertest": "^3.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Scorpibear/remote-chess-engine.git"
   },
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "uci-adapter": "github:Scorpibear/uci-adapter"
   }
 }
