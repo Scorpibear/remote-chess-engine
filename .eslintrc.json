@@ -1,3 +1,16 @@
 {
-    "extends": "airbnb-base"
+    "extends": "airbnb-base",
+    "globals": {
+        "describe": true,
+        "it": true,
+        "beforeAll": true,
+        "beforeEach": true,
+        "require": true,
+        "spyOn": true,
+        "expect": true
+    },
+    "rules": {
+        "linebreak-style":"off",
+        "no-console":"off"
+    }
 }
