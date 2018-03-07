@@ -1,0 +1,5 @@
+describe('analyzer', () => {
+  describe('push', () => {
+
+  })
+})
