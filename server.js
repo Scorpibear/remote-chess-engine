@@ -23,7 +23,7 @@ app.post('/fen', (req, res) => {
       console.error('POST /fen: ', err);
     }
   });
-  res.send();
+  res.send({ placeInQueue: 0, estimatedTime: undefined });
 });
 
 app.delete('/fen', (req, res) => {
