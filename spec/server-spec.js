@@ -6,6 +6,19 @@ const analyzer = require('../analyzer');
 describe('server', () => {
   const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
+  describe('GET /fen', () => {
+    it('returns bestMove for this fen', (done) => {
+      request(app)
+        .get('/fen')
+        .send({ fen, depth: 33 })
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res.body.bestMove).toBeUndefined();
+          done();
+        });
+    });
+  });
+
   describe('POST /fen', () => {
     it('adds fen to queue for analysis', (done) => {
       spyOn(queue, 'add').and.stub();

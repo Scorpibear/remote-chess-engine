@@ -24,7 +24,6 @@ app.post('/fen', (req, res) => {
       console.error('POST /fen: ', err);
     }
   });
-  
 });
 
 app.delete('/fen', (req, res) => {
