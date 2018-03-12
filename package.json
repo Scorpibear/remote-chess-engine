@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jasmine",
     "tdd": "nodemon --exec jasmine",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "coverage": "istanbul cover node_modules/jasmine/bin/jasmine.js"
   },
   "keywords": [
     "chess",
@@ -26,7 +27,8 @@
     "eslint-plugin-import": "^2.9.0",
     "jasmine": "^2.8.0",
     "nodemon": "^1.12.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "istanbul": "^0.4.5"
   },
   "repository": {
     "type": "git",

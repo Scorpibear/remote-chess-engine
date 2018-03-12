@@ -7,7 +7,8 @@
         "beforeEach": true,
         "require": true,
         "spyOn": true,
-        "expect": true
+        "expect": true,
+        "jasmine": true
     },
     "rules": {
         "linebreak-style":"off",
