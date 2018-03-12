@@ -31,20 +31,22 @@ describe('server', () => {
           done();
         });
     });
-    it('returns place in queue starting from 0', (done) => {
+    it('returns place in queue', (done) => {
+      spyOn(queue, 'add').and.returnValue({ placeInQueue: 3 });
       request(app)
         .post('/fen').send({ fen, depth: 40 })
         .end((err, res) => {
           if (err) done(err);
-          expect(res.body.placeInQueue).toBe(0);
+          expect(res.body.placeInQueue).toBe(3);
           done();
         });
     });
     it('returns estimated time to analyze', (done) => {
+      spyOn(queue, 'add').and.returnValue({ estimatedTime: 1234567 });
       request(app)
         .post('/fen').send({ fen, depth: 5 })
         .end((err, res) => {
-          expect(res.body.estimatedTime).toBeUndefined();
+          expect(res.body.estimatedTime).toBe(1234567);
           done();
         });
     });

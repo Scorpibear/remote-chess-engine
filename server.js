@@ -17,13 +17,14 @@ app.post('/fen', (req, res) => {
   req.on('data', (chunk) => {
     try {
       const data = JSON.parse(chunk);
-      queue.add(data.fen, data.depth);
+      const queueInfo = queue.add(data.fen, data.depth);
+      res.send(queueInfo);
       analyzer.push();
     } catch (err) {
       console.error('POST /fen: ', err);
     }
   });
-  res.send({ placeInQueue: 0, estimatedTime: undefined });
+  
 });
 
 app.delete('/fen', (req, res) => {
