@@ -2,7 +2,7 @@ Remote Chess Engine
 ===================
 
 [![Build Status](https://travis-ci.org/Scorpibear/remote-chess-engine.svg?branch=master)](https://travis-ci.org/Scorpibear/remote-chess-engine)
-[![Coverage Status](https://codecov.io/gh/Scorpibear/chegura/remote-chess-engine.svg)](https://codecov.io/gh/Scorpibear/remote-chess-engine)
+[![Coverage Status](https://codecov.io/gh/Scorpibear/remote-chess-engine/branch/master/graph/badge.svg)](https://codecov.io/gh/Scorpibear/remote-chess-engine)
 [![npm version](https://badge.fury.io/js/remote-chess-engine.svg)](https://www.npmjs.com/package/remote-chess-engine)
 
 Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)
