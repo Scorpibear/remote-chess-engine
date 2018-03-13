@@ -7,6 +7,9 @@ Remote Chess Engine
 
 Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)
 
+API
+--
+
 **GET /fen**: input - **fen**, **depth**. Returns **bestMove** for this fen and **depth** or **placeInQueue** and **estimatedTime** when answer could be provided. If fen is not analyzed and is not in queue, returns {bestMove: underfined, placeInQueue: undefined, estimatedTime: underfined}
 
 **POST /fen** - posts fen for analysis with specified depth at the end of a queue, triggers analysis from the top of queue if nothing is being analyzed now
