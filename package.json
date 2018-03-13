@@ -7,7 +7,8 @@
     "test": "jasmine",
     "tdd": "nodemon --exec jasmine",
     "start": "nodemon server.js",
-    "coverage": "istanbul cover node_modules/jasmine/bin/jasmine.js"
+    "coverage": "istanbul cover node_modules/jasmine/bin/jasmine.js",
+    "e2e": "start node server.js && jasmine ./spec/e2e.js"
   },
   "keywords": [
     "chess",

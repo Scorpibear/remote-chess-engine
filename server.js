@@ -6,11 +6,11 @@ const app = express();
 const port = process.env.PORT || 9977;
 
 app.get('/', (req, res) => {
-  res.send('This remote chess engine supports <a href="https://github.com/Scorpibear/ricpa-specification/releases/tag/v0.1">RICPA specification</a>. Check it for supported API methods.');
+  res.send('Check <a href="https://github.com/Scorpibear/remote-chess-engine">README</a> for supported API methods.');
 });
 
 app.get('/fen', (req, res) => {
-  res.send(JSON.stringify({ bestmove: undefined, estimatedTime: undefined }));
+  res.send(JSON.stringify({ bestMove: undefined, estimatedTime: undefined }));
 });
 
 app.post('/fen', (req, res) => {

@@ -11,7 +11,9 @@
         "jasmine": true
     },
     "rules": {
-        "linebreak-style":"off",
-        "no-console":"off"
+        "linebreak-style": "off",
+        "no-console": "off",
+        "indent": 2,
+        "comma-dangle": "off"
     }
 }
