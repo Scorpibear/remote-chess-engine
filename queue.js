@@ -1,3 +1,5 @@
 exports.add = () => {
-    
-}
+};
+
+exports.checkPlace = () => {
+};

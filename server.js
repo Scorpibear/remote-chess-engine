@@ -1,6 +1,7 @@
 const express = require('express');
 const queue = require('./queue');
 const analyzer = require('./analyzer');
+const evaluations = require('./evaluations');
 
 const app = express();
 const port = process.env.PORT || 9977;
@@ -10,7 +11,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/fen', (req, res) => {
-  res.send(JSON.stringify({ bestMove: undefined, estimatedTime: undefined }));
+  const data = { fen: req.query.fen, depth: req.query.depth };
+  const evaluation = evaluations.get(data);
+  if (evaluation.bestMove) {
+    res.json(evaluation);
+  } else {
+    const placeInfo = queue.checkPlace(data);
+    res.json(placeInfo);
+  }
 });
 
 app.post('/fen', (req, res) => {

@@ -2,18 +2,47 @@ const request = require('supertest');
 const app = require('../server');
 const queue = require('../queue');
 const analyzer = require('../analyzer');
+const evaluations = require('../evaluations');
 
 describe('server', () => {
   const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   describe('GET /fen', () => {
-    it('returns bestMove for this fen', (done) => {
+    it('returns bestMove and depth for evaluated fens', (done) => {
+      spyOn(evaluations, 'get').and.returnValue({ bestMove: 'e4', depth: 35 });
+      request(app)
+        .get('/fen')
+        .send({ fen, depth: 33 })
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res.body.bestMove).toBe('e4');
+          expect(res.body.depth).toBe(35);
+          done();
+        });
+    });
+    it('returns placeInQueue and estimatedTime if not evaluated yet', (done) => {
+      spyOn(evaluations, 'get').and.returnValue({ bestMove: undefined });
+      spyOn(queue, 'checkPlace').and.returnValue({ placeInQueue: 1, estimatedTime: 200000 });
       request(app)
         .get('/fen')
         .send({ fen, depth: 33 })
         .end((err, res) => {
           if (err) done(err);
           expect(res.body.bestMove).toBeUndefined();
+          expect(res.body.placeInQueue).toBe(1);
+          expect(res.body.estimatedTime).toBe(200000);
+          done();
+        });
+    });
+    it('returns placeInQueue undefined if not added to queue for analysis yet', (done) => {
+      spyOn(evaluations, 'get').and.returnValue({ bestMove: undefined });
+      spyOn(queue, 'checkPlace').and.returnValue({ placeInQueue: undefined, estimatedTime: undefined });
+      request(app)
+        .get('/fen')
+        .send({ fen, depth: 33 })
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res.body.placeInQueue).toBeUndefined();
           done();
         });
     });
