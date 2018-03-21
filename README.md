@@ -17,6 +17,6 @@ API
   - depth - depth to analyze
   - returns place in queue starting from 0 and estimated time to analyze ({placeInQueue, estimatedTime})
 
-**DELETE /fen** - delete specified fen from the queue
+**DELETE /fen** - delete specified fen from the queue. Input - **fen**.
 
 **GET /queue** - gets queue as [{fen, depth, estimatedTime}, ...]

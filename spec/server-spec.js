@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../server');
-const queue = require('../queue');
+const queue = require('../main-queue');
 const analyzer = require('../analyzer');
 const evaluations = require('../evaluations');
 
@@ -92,5 +92,21 @@ describe('server', () => {
           done();
         });
     });
+  });
+  describe('DELETE /fen', () => {
+    it('delete specified fen from the queue', (done) => {
+      spyOn(queue, 'delete');
+      request(app)
+        .delete('/fen').send({ fen })
+        .expect(200)
+        .end((err) => {
+          if (err) done(err);
+          expect(queue.delete).toHaveBeenCalledWith(fen);
+          done();
+        });
+    });
+  });
+  describe('GET /queue', () => {
+    it('gets queue as [{fen, depth, estimatedTime}, ...]');
   });
 });

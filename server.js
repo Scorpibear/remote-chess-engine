@@ -1,5 +1,5 @@
 const express = require('express');
-const queue = require('./queue');
+const queue = require('./main-queue');
 const analyzer = require('./analyzer');
 const evaluations = require('./evaluations');
 
@@ -17,7 +17,7 @@ app.get('/fen', (req, res) => {
     res.json(evaluation);
   } else {
     const placeInfo = queue.checkPlace(data);
-    res.json(placeInfo);
+    res.json({ placeInQueue: placeInfo.placeInQueue, estimatedTime: placeInfo.estimatedTime });
   }
 });
 
@@ -35,7 +35,15 @@ app.post('/fen', (req, res) => {
 });
 
 app.delete('/fen', (req, res) => {
-  res.send('Not implemented yet');
+  req.on('data', (chunk) => {
+    try {
+      const data = JSON.parse(chunk);
+      queue.delete(data.fen);
+      res.send();
+    } catch (err) {
+      console.error('DELETE /fen: ', err);
+    }
+  });
 });
 
 app.get('/queue', (req, res) => {
