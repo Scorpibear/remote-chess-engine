@@ -3,7 +3,12 @@ class Queue {
     this.data = [];
   }
   add(item) {
-    this.data.push(item);
+    const placeInQueue = this.data.findIndex(queueItem => (queueItem.fen === item.fen));
+    if (placeInQueue >= 0 && this.data[placeInQueue].depth < item.depth) {
+      this.data.splice(placeInQueue, 1, item);
+    } else {
+      this.data.push(item);
+    }
   }
   checkPlace(item) {
     const placeInQueue = this.data.findIndex(queueItem =>
@@ -15,6 +20,10 @@ class Queue {
     const placeInQueue = this.data.findIndex(queueItem =>
       (queueItem.fen === item.fen));
     this.data.splice(placeInQueue, 1);
+  }
+
+  toList() {
+    return this.data.slice();
   }
 }
 
