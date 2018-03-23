@@ -1,6 +1,6 @@
 class Queue {
-  constructor() {
-    this.data = [];
+  constructor(initData) {
+    this.data = initData ? initData.slice() : [];
   }
   add(item) {
     const placeInQueue = this.data.findIndex(queueItem => (queueItem.fen === item.fen));

@@ -3,7 +3,10 @@ const Queue = require('../queue');
 describe('queue', () => {
   const task = { fen: 'rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', depth: 56 };
   describe('constructor', () => {
-    it('initializes queue from input list');
+    it('initializes queue from input list', () => {
+      const queue = new Queue([task]);
+      expect(queue.toList()).toEqual([task]);
+    });
   });
   describe('add', () => {
     it('add fen with depth to the queue', () => {
@@ -27,7 +30,7 @@ describe('queue', () => {
     });
   });
   describe('delete', () => {
-    it('delete fen from queue');
+    it('removes a fen');
   });
   describe('checkPlace', () => {
     it('checkPlace of specified fen with depth', () => {
