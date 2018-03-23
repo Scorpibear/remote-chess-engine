@@ -4,8 +4,12 @@ class Queue {
   }
   add(item) {
     const placeInQueue = this.data.findIndex(queueItem => (queueItem.fen === item.fen));
-    if (placeInQueue >= 0 && this.data[placeInQueue].depth < item.depth) {
-      this.data.splice(placeInQueue, 1, item);
+    if (placeInQueue >= 0) {
+      if (this.data[placeInQueue].depth < item.depth) {
+        this.data.splice(placeInQueue, 1, item);
+      } else {
+        // do nothing as item is in queue with good depth
+      }
     } else {
       this.data.push(item);
     }

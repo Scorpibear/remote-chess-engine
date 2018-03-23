@@ -20,7 +20,11 @@ describe('queue', () => {
       queue.add({ fen: task.fen, depth: task.depth + 2 });
       expect(queue.toList()).toEqual([{ fen: task.fen, depth: task.depth + 2 }]);
     });
-    it('does not change queue if the request is already in it');
+    it('does not change queue if the request is already in it', () => {
+      const queue = new Queue([task]);
+      queue.add(task);
+      expect(queue.toList()).toEqual([task]);
+    });
   });
   describe('toList', () => {
     it('output modification does not modify queue content', () => {
@@ -30,12 +34,15 @@ describe('queue', () => {
     });
   });
   describe('delete', () => {
-    it('removes a fen');
+    it('removes a fen', () => {
+      const queue = new Queue([{ fen: 'aaaa', depth: 50 }, { fen: 'bbbb', depth: 50 }]);
+      queue.delete({ fen: 'aaaa' });
+      expect(queue.toList()).toEqual([{ fen: 'bbbb', depth: 50 }]);
+    });
   });
   describe('checkPlace', () => {
     it('checkPlace of specified fen with depth', () => {
-      const queue = new Queue();
-      queue.add({ fen: 'asdf', depth: 5 });
+      const queue = new Queue([{ fen: 'asdf', depth: 5 }]);
       const placeInfo = queue.checkPlace({ fen: 'asdf', depth: 5 });
       expect(placeInfo.placeInQueue).toBe(0);
     });
