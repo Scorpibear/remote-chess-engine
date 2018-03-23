@@ -47,7 +47,8 @@ app.delete('/fen', (req, res) => {
 });
 
 app.get('/queue', (req, res) => {
-  res.send('Not implemented yet');
+  const queueData = queue.toList();
+  res.send(queueData);
 });
 
 const server = app.listen(port);

@@ -107,6 +107,17 @@ describe('server', () => {
     });
   });
   describe('GET /queue', () => {
-    it('gets queue as [{fen, depth, estimatedTime}, ...]');
+    it('gets queue as [{fen, depth, estimatedTime}, ...]', (done) => {
+      const queueData = [{ fen, depth: 50, estimatedTime: 1234 }];
+      spyOn(queue, 'toList').and.returnValue(queueData);
+      request(app)
+        .get('/queue')
+        .expect(200)
+        .end((err, res) => {
+          if (err) done(err);
+          expect(res.body).toEqual(queueData);
+          done();
+        });
+    });
   });
 });
