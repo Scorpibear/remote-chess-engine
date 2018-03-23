@@ -3,6 +3,7 @@ const app = require('../server');
 const queue = require('../main-queue');
 const analyzer = require('../analyzer');
 const evaluations = require('../evaluations');
+const estimator = require('../estimator');
 
 describe('server', () => {
   const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -108,14 +109,17 @@ describe('server', () => {
   });
   describe('GET /queue', () => {
     it('gets queue as [{fen, depth, estimatedTime}, ...]', (done) => {
-      const queueData = [{ fen, depth: 50, estimatedTime: 1234 }];
+      const queueData = [{ fen, depth: 50 }];
+      const queueDataEstimated = [{ fen, depth: 50, estimatedTime: '0:05:34' }];
       spyOn(queue, 'toList').and.returnValue(queueData);
+      spyOn(estimator, 'estimateQueue').and.returnValue(queueDataEstimated);
       request(app)
         .get('/queue')
         .expect(200)
         .end((err, res) => {
           if (err) done(err);
-          expect(res.body).toEqual(queueData);
+          expect(res.body).toEqual(queueDataEstimated);
+          expect(estimator.estimateQueue).toHaveBeenCalledWith(queueData);
           done();
         });
     });

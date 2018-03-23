@@ -36,6 +36,12 @@ describe('queue', () => {
       const placeInfo = queue.checkPlace({ fen: 'asdf', depth: 5 });
       expect(placeInfo.placeInQueue).toBe(0);
     });
-    it('returns {placeInQueue, estimatedTime}');
+    it('returns 1 for the second place', () => {
+      const queue = new Queue();
+      queue.add({ fen: 'aaaa', depth: 50 });
+      queue.add({ fen: 'bbbb', depth: 50 });
+      const placeInfo = queue.checkPlace({ fen: 'bbbb', depth: 50 });
+      expect(placeInfo.placeInQueue).toEqual(1);
+    });
   });
 });

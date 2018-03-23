@@ -2,6 +2,7 @@ const express = require('express');
 const queue = require('./main-queue');
 const analyzer = require('./analyzer');
 const evaluations = require('./evaluations');
+const estimator = require('./estimator');
 
 const app = express();
 const port = process.env.PORT || 9977;
@@ -48,7 +49,8 @@ app.delete('/fen', (req, res) => {
 
 app.get('/queue', (req, res) => {
   const queueData = queue.toList();
-  res.send(queueData);
+  const queueDataEstimated = estimator.estimateQueue(queueData);
+  res.send(queueDataEstimated);
 });
 
 const server = app.listen(port);
