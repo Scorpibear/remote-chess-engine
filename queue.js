@@ -26,6 +26,10 @@ class Queue {
     this.data.splice(placeInQueue, 1);
   }
 
+  getFirst() {
+    return this.data.length ? this.data[0] : null;
+  }
+
   toList() {
     return this.data.slice();
   }

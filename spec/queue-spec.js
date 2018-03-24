@@ -54,4 +54,7 @@ describe('queue', () => {
       expect(placeInfo.placeInQueue).toEqual(1);
     });
   });
+  describe('getFirst', () => {
+    it('returns the first element from the queue');
+  });
 });
