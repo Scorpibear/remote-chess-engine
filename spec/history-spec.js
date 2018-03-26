@@ -12,8 +12,17 @@ describe('history', () => {
     });
   });
   describe('getMeanTime', () => {
-    it('returns 20 min if no data at all');
-    it('returns data as is if it is single');
+    beforeEach(() => {
+      history.clear();
+    });
+    it('returns 20 min if no data at all', () => {
+      expect(history.getMeanTime({ depth: 50 })).toBe(20 * 60);
+    });
+    it('returns data as is if it is single', () => {
+      console.log('****');
+      history.add({ depth: 55, time: 15 * 60 });
+      expect(history.getMeanTime({ depth: 55 })).toBe(15 * 60);
+    });
     it('returns mean(==avg) if 2 data');
     it('returns middle value in case of 3 data');
     it('returns mean for 4 values');

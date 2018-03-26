@@ -55,6 +55,9 @@ describe('queue', () => {
     });
   });
   describe('getFirst', () => {
-    it('returns the first element from the queue');
+    it('returns the first element from the queue', () => {
+      const queue = new Queue([{ fen: 'aaa', depth: 50 }]);
+      expect(queue.getFirst()).toEqual({ fen: 'aaa', depth: 50 });
+    });
   });
 });
