@@ -1,29 +1,29 @@
 const defaultTime = 20 * 60; // in seconds
-let data = [];
-const timeMap = new Map();
+const timeMap = new Map(); // depth => [time1, time2, ...]
 
 exports.clear = () => {
-  data = [];
   timeMap.clear();
 };
 
 exports.getMeanTime = ({ depth }) => {
-  const timeInfo = timeMap.get(depth);
-  if (timeInfo) {
-    return Math.ceil(timeInfo.sum / timeInfo.count);
+  const data = timeMap.get(depth);
+  if (data) {
+    if (data.length % 2 === 1) {
+      return data[Math.floor(data.length / 2)];
+    }
+    return Math.ceil((data[data.length / 2] + data[(data.length / 2) - 1]) / 2);
   }
   return defaultTime;
 };
 
-exports.getAllData = () => data.slice();
+exports.getAllData = () => Array.from(timeMap);
 
 exports.add = ({ depth, time }) => {
-  data.push({ depth, time });
   if (timeMap.has(depth)) {
     const timeData = timeMap.get(depth);
-    timeData.sum += time;
-    timeData.count += 1;
+    timeData.push(time);
   } else {
-    timeMap.set(depth, { sum: time, count: 1 });
+    timeMap.set(depth, [time]);
   }
+  console.log('timeMap', timeMap, Array.from(timeMap));
 };

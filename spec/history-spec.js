@@ -19,19 +19,33 @@ describe('history', () => {
       expect(history.getMeanTime({ depth: 50 })).toBe(20 * 60);
     });
     it('returns data as is if it is single', () => {
-      console.log('****');
       history.add({ depth: 55, time: 15 * 60 });
       expect(history.getMeanTime({ depth: 55 })).toBe(15 * 60);
     });
-    it('returns mean(==avg) if 2 data');
-    it('returns middle value in case of 3 data');
-    it('returns mean for 4 values');
+    it('returns mean(==avg) if 2 data', () => {
+      history.add({ depth: 55, time: 5 });
+      history.add({ depth: 55, time: 7 });
+      expect(history.getMeanTime({ depth: 55 })).toBe(6);
+    });
+    it('returns middle value in case of 3 data', () => {
+      history.add({ depth: 60, time: 10 });
+      history.add({ depth: 60, time: 12 });
+      history.add({ depth: 60, time: 42 });
+      expect(history.getMeanTime({ depth: 60 })).toBe(12);
+    });
+    it('returns mean for 4 values', () => {
+      history.add({ depth: 62, time: 1 });
+      history.add({ depth: 62, time: 2 });
+      history.add({ depth: 62, time: 6 });
+      history.add({ depth: 62, time: 60 });
+      expect(history.getMeanTime({ depth: 62 })).toBe(4);
+    });
   });
   describe('add', () => {
     it('saves the data', () => {
       history.clear();
       history.add({ depth: 50, time: 1234 });
-      expect(history.getAllData()).toEqual([{ depth: 50, time: 1234 }]);
+      expect(history.getAllData()).toEqual([[50, [1234]]]);
     });
   });
 });
