@@ -19,3 +19,9 @@ exports.push = async () => {
     }
   }
 };
+
+exports.getCurrentAnalysisTime = () => {
+};
+
+exports.getActiveFen = () => {
+};

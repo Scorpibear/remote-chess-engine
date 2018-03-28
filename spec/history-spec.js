@@ -15,9 +15,6 @@ describe('history', () => {
     beforeEach(() => {
       history.clear();
     });
-    it('returns 20 min if no data at all', () => {
-      expect(history.getMeanTime({ depth: 50 })).toBe(20 * 60);
-    });
     it('returns data as is if it is single', () => {
       history.add({ depth: 55, time: 15 * 60 });
       expect(history.getMeanTime({ depth: 55 })).toBe(15 * 60);

@@ -1,4 +1,3 @@
-const defaultTime = 20 * 60; // in seconds
 const timeMap = new Map(); // depth => [time1, time2, ...]
 
 exports.clear = () => {
@@ -13,7 +12,7 @@ exports.getMeanTime = ({ depth }) => {
     }
     return Math.ceil((data[data.length / 2] + data[(data.length / 2) - 1]) / 2);
   }
-  return defaultTime;
+  return undefined;
 };
 
 exports.getAllData = () => Array.from(timeMap);

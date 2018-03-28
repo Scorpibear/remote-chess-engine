@@ -23,5 +23,16 @@ describe('analyzer', () => {
     });
     it('starts timer before evaluation');
     it('adds to history time spent');
+    it('calls analyze if it is not run yet');
+  });
+  describe('getCurrentAnalysisTime', () => {
+    it('works');
+  });
+  describe('getActiveFen', () => {
+    it('returns active fen while analyze is in progress');
+    it('returns null if analysis finished');
+  });
+  describe('analyze', () => {
+    it('schedules to run push in a second if queue is not empty');
   });
 });
