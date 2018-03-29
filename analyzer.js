@@ -16,13 +16,19 @@ exports.analyze = async () => {
     timer.start();
     const engine = new Engine(config.get('pathToEngine'));
     try {
-      const result = await engine.analyzeToDepth(task);
+      const result = await engine.analyzeToDepth(task.fen, task.depth);
       if (result) {
-        evaluations.save({ fen: task.fen, depth: task.depth, bestMove: result.bestmove });
+        evaluations.save({
+          fen: task.fen,
+          depth: task.depth,
+          bestMove: result.bestmove,
+          score: result.info[result.info.length - 1].score.value
+        });
       }
     } catch (err) {
       console.error(err);
     }
+    queue.delete({ fen: task.fen });
     history.add({ depth: task.depth, time: timer.getTimePassed() });
     setTimeout(this.push, PAUSE_BETWEEN_ANALYSIS);
   }

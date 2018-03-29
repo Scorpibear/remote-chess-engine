@@ -24,5 +24,4 @@ exports.add = ({ depth, time }) => {
   } else {
     timeMap.set(depth, [time]);
   }
-  console.log('timeMap', timeMap, Array.from(timeMap));
 };

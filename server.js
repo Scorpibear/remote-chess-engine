@@ -26,7 +26,7 @@ app.post('/fen', (req, res) => {
   req.on('data', (chunk) => {
     try {
       const data = JSON.parse(chunk);
-      const queueInfo = queue.add(data.fen, data.depth);
+      const queueInfo = queue.add({ fen: data.fen, depth: data.depth });
       res.send(queueInfo);
       analyzer.push();
     } catch (err) {

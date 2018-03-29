@@ -14,14 +14,7 @@ describe('analyzer', () => {
 
       analyzer.push();
 
-      expect(engine.prototype.analyzeToDepth).toHaveBeenCalledWith({ fen: 'aaa', depth: 40 });
-    });
-    it('saves evaluation', async () => {
-      spyOn(engine.prototype, 'analyzeToDepth').and.returnValue(Promise.resolve({ bestmove: 'Nf3' }));
-      spyOn(evaluations, 'save').and.stub();
-      spyOn(queue, 'getFirst').and.returnValue({ fen: 'bbb', depth: 50 });
-      await analyzer.push();
-      expect(evaluations.save).toHaveBeenCalledWith({ fen: 'bbb', depth: 50, bestMove: 'Nf3' });
+      expect(engine.prototype.analyzeToDepth).toHaveBeenCalledWith('aaa', 40);
     });
     it('starts timer before evaluation', (done) => {
       spyOn(timer, 'start').and.stub();
@@ -83,6 +76,22 @@ describe('analyzer', () => {
       spyOn(timer, 'getTimePassed').and.returnValue(600);
       await analyzer.analyze();
       expect(history.add).toHaveBeenCalledWith({ depth: 50, time: 600 });
+    });
+    it('deletes fen from queue after analysis', async () => {
+      spyOn(queue, 'getFirst').and.returnValue({ depth: 51, fen: 'b' });
+      spyOn(queue, 'delete').and.stub();
+      spyOn(engine.prototype, 'analyzeToDepth').and.returnValue({ bestMove: 'Nf3' });
+      await analyzer.analyze();
+      expect(queue.delete).toHaveBeenCalledWith({ fen: 'b' });
+    });
+    it('saves evaluation', async () => {
+      spyOn(engine.prototype, 'analyzeToDepth').and.returnValue(Promise.resolve({ bestmove: 'Nf3', info: [{ score: { value: 123 } }] }));
+      spyOn(evaluations, 'save').and.stub();
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'bbb', depth: 50 });
+      await analyzer.analyze();
+      expect(evaluations.save).toHaveBeenCalledWith({
+        fen: 'bbb', depth: 50, bestMove: 'Nf3', score: 123
+      });
     });
   });
 });

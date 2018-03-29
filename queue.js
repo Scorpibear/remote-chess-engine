@@ -3,15 +3,18 @@ class Queue {
     this.data = initData ? initData.slice() : [];
   }
   add({ fen, depth }) {
-    const placeInQueue = this.data.findIndex(item => (item.fen === fen));
-    if (placeInQueue >= 0) {
-      if (this.data[placeInQueue].depth < depth) {
-        this.data[placeInQueue].depth = depth;
+    console.log('adding ', { fen, depth });
+    if (fen && depth) {
+      const placeInQueue = this.data.findIndex(item => (item.fen === fen));
+      if (placeInQueue >= 0) {
+        if (this.data[placeInQueue].depth < depth) {
+          this.data[placeInQueue].depth = depth;
+        } else {
+          // do nothing as item is in queue with good depth
+        }
       } else {
-        // do nothing as item is in queue with good depth
+        this.data.push({ fen, depth });
       }
-    } else {
-      this.data.push({ fen, depth });
     }
   }
   checkPlace({ fen, depth }) {
@@ -20,9 +23,8 @@ class Queue {
     return { placeInQueue };
   }
 
-  delete(item) {
-    const placeInQueue = this.data.findIndex(queueItem =>
-      (queueItem.fen === item.fen));
+  delete({ fen }) {
+    const placeInQueue = this.data.findIndex(item => (item.fen === fen));
     this.data.splice(placeInQueue, 1);
   }
 

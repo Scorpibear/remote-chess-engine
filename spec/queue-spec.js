@@ -14,6 +14,16 @@ describe('queue', () => {
       queue.add(task);
       expect(queue.toList()).toEqual([task]);
     });
+    it('does not allow to add empty fen', () => {
+      const queue = new Queue();
+      queue.add({ depth: 50 });
+      expect(queue.toList()).toEqual([]);
+    });
+    it('does not allow to add empty depth', () => {
+      const queue = new Queue();
+      queue.add({ fen: 'something' });
+      expect(queue.toList()).toEqual([]);
+    });
     it('replaces existent task if new request have the same fen but greater depth', () => {
       const queue = new Queue();
       queue.add(task);

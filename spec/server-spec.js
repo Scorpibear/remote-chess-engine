@@ -59,7 +59,7 @@ describe('server', () => {
         .expect(200)
         .end((err) => {
           if (err) done(err);
-          expect(queue.add).toHaveBeenCalledWith(fen, 40);
+          expect(queue.add).toHaveBeenCalledWith({ fen, depth: 40 });
           done();
         });
     });
