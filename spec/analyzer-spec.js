@@ -45,9 +45,6 @@ describe('analyzer', () => {
     });
   });
   describe('getCurrentAnalysisTime', () => {
-    it('returns undefined if nothing is analyzed', () => {
-      expect(analyzer.getCurrentAnalysisTime()).toBeUndefined();
-    });
     it('returns time passed from analysis', () => {
       spyOn(timer, 'getTimePassed').and.returnValue(1);
       expect(analyzer.getCurrentAnalysisTime()).toBe(1);
