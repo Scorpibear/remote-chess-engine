@@ -3,6 +3,7 @@ const config = require('config');
 
 const queue = require('./main-queue');
 const evaluations = require('./evaluations');
+const history = require('./history');
 const timer = require('./timer');
 
 const PAUSE_BETWEEN_ANALYSIS = 1000; // 1000 miliseconds
@@ -22,6 +23,7 @@ exports.analyze = async () => {
     } catch (err) {
       console.error(err);
     }
+    history.add({ depth: task.depth, time: timer.getTimePassed() });
     setTimeout(this.push, PAUSE_BETWEEN_ANALYSIS);
   }
   task = null;

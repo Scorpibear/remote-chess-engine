@@ -4,6 +4,7 @@ const analyzer = require('../analyzer');
 const queue = require('../main-queue');
 const evaluations = require('../evaluations');
 const timer = require('../timer');
+const history = require('../history');
 
 describe('analyzer', () => {
   describe('push', () => {
@@ -29,7 +30,6 @@ describe('analyzer', () => {
       expect(timer.start).toHaveBeenCalled();
       promise.then(done);
     });
-    it('adds to history time spent');
     it('calls analyze if it is not run yet', () => {
       spyOn(analyzer, 'analyze');
       analyzer.push();
@@ -79,6 +79,13 @@ describe('analyzer', () => {
         expect(global.setTimeout).toHaveBeenCalledWith(analyzer.push, 1000);
         done();
       });
+    });
+    it('adds to history time spent', async () => {
+      spyOn(history, 'add').and.stub();
+      spyOn(queue, 'getFirst').and.returnValue({ depth: 50, fen: 'abc' });
+      spyOn(timer, 'getTimePassed').and.returnValue(600);
+      await analyzer.analyze();
+      expect(history.add).toHaveBeenCalledWith({ depth: 50, time: 600 });
     });
   });
 });

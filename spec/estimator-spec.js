@@ -18,7 +18,7 @@ describe('estimator', () => {
   describe('estimate', () => {
     it('uses getMeanTime', () => {
       spyOn(history, 'getMeanTime').and.returnValue(65);
-      expect(estimator.estimate({ fen: 'abc', depth: 40 })).toEqual(65);
+      expect(estimator.estimate({ fen: 'cdf', depth: 40 })).toEqual(65);
     });
     it('consider time when the analysis of the first position in queue started', () => {
       spyOn(history, 'getMeanTime').and.returnValue(90);
