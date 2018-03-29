@@ -14,7 +14,11 @@ describe('estimator', () => {
       spyOn(analyzer, 'getCurrentAnalysisTime').and.returnValue(30);
       expect(estimator.estimate({ depth: 40 })).toEqual(60);
     });
-    it('removes from mean time calculation the shorted if the time has passed');
+    it('does not allow negative estimations', () => {
+      spyOn(history, 'getMeanTime').and.returnValue(70);
+      spyOn(analyzer, 'getCurrentAnalysisTime').and.returnValue(80);
+      expect(estimator.estimate({ depth: 40 })).toBeGreaterThan(0);
+    });
   });
   describe('estimate', () => {
     it('uses getMeanTime', () => {

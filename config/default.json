@@ -1,1 +1,4 @@
-{"pathToEngine": "stockfish_9_x64.exe"}
+{
+  "pathToEngine": "stockfish_9_x64.exe",
+  "port": 9977
+}

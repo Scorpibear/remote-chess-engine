@@ -8,6 +8,9 @@ exports.estimate = ({ fen, depth }) => {
   if (seconds) {
     if (analyzer.getActiveFen() === fen) {
       seconds -= analyzer.getCurrentAnalysisTime();
+      while (seconds < 0) {
+        seconds += defaultTime;
+      }
     }
     return seconds;
   }
