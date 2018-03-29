@@ -3,6 +3,7 @@ const engine = require('uci-adapter');
 const analyzer = require('../analyzer');
 const queue = require('../main-queue');
 const evaluations = require('../evaluations');
+const timer = require('../timer');
 
 describe('analyzer', () => {
   describe('push', () => {
@@ -21,18 +22,63 @@ describe('analyzer', () => {
       await analyzer.push();
       expect(evaluations.save).toHaveBeenCalledWith({ fen: 'bbb', depth: 50, bestMove: 'Nf3' });
     });
-    it('starts timer before evaluation');
+    it('starts timer before evaluation', (done) => {
+      spyOn(timer, 'start').and.stub();
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'aaa', depth: 100 });
+      const promise = analyzer.analyze();
+      expect(timer.start).toHaveBeenCalled();
+      promise.then(done);
+    });
     it('adds to history time spent');
-    it('calls analyze if it is not run yet');
+    it('calls analyze if it is not run yet', () => {
+      spyOn(analyzer, 'analyze');
+      analyzer.push();
+      expect(analyzer.analyze).toHaveBeenCalled();
+    });
+    it('do nothing if analysis is in progress', async (done) => {
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'do', depth: 99 });
+      const promise = analyzer.analyze();
+      spyOn(analyzer, 'analyze');
+      await analyzer.push();
+      expect(analyzer.analyze).not.toHaveBeenCalled();
+      promise.then(done);
+    });
   });
   describe('getCurrentAnalysisTime', () => {
-    it('works');
+    it('returns undefined if nothing is analyzed', () => {
+      expect(analyzer.getCurrentAnalysisTime()).toBeUndefined();
+    });
+    it('returns time passed from analysis', () => {
+      spyOn(timer, 'getTimePassed').and.returnValue(1);
+      expect(analyzer.getCurrentAnalysisTime()).toBe(1);
+    });
   });
   describe('getActiveFen', () => {
-    it('returns active fen while analyze is in progress');
-    it('returns null if analysis finished');
+    it('returns null by default', () => {
+      expect(analyzer.getActiveFen()).toBeNull();
+    });
+    it('returns active fen while analyze is in progress', (done) => {
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'prp' });
+      const promise = analyzer.analyze();
+      expect(analyzer.getActiveFen()).toBe('prp');
+      promise.then(done);
+    });
+    it('returns null if analysis finished', async () => {
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'qkr' });
+      await analyzer.analyze();
+      expect(analyzer.getActiveFen()).toBeNull();
+    });
   });
   describe('analyze', () => {
-    it('schedules to run push in a second if queue is not empty');
+    it('schedules to run push in a second if queue is not empty', (done) => {
+      spyOn(global, 'setTimeout').and.stub();
+      spyOn(analyzer, 'push').and.stub();
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'abc', depth: 100 });
+      spyOn(engine.prototype, 'analyzeToDepth').and.stub();
+      analyzer.analyze().then(() => {
+        expect(global.setTimeout).toHaveBeenCalledWith(analyzer.push, 1000);
+        done();
+      });
+    });
   });
 });

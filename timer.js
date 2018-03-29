@@ -1,0 +1,2 @@
+exports.getTimePassed = () => {};
+exports.start = () => {};

@@ -3,25 +3,36 @@ const config = require('config');
 
 const queue = require('./main-queue');
 const evaluations = require('./evaluations');
+const timer = require('./timer');
 
-exports.push = async () => {
-  const engine = new Engine(config.get('pathToEngine'));
-  const task = queue.getFirst();
+const PAUSE_BETWEEN_ANALYSIS = 1000; // 1000 miliseconds
+
+let task = null;
+
+exports.analyze = async () => {
+  task = queue.getFirst();
   if (task) {
-    let result = null;
+    timer.start();
+    const engine = new Engine(config.get('pathToEngine'));
     try {
-      result = await engine.analyzeToDepth(task);
+      const result = await engine.analyzeToDepth(task);
+      if (result) {
+        evaluations.save({ fen: task.fen, depth: task.depth, bestMove: result.bestmove });
+      }
     } catch (err) {
       console.error(err);
     }
-    if (result) {
-      evaluations.save({ fen: task.fen, depth: task.depth, bestMove: result.bestmove });
-    }
+    setTimeout(this.push, PAUSE_BETWEEN_ANALYSIS);
+  }
+  task = null;
+};
+
+exports.push = async () => {
+  if (task === null) {
+    await this.analyze();
   }
 };
 
-exports.getCurrentAnalysisTime = () => {
-};
+exports.getCurrentAnalysisTime = () => timer.getTimePassed();
 
-exports.getActiveFen = () => {
-};
+exports.getActiveFen = () => (task ? task.fen : null);
