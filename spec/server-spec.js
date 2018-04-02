@@ -22,7 +22,7 @@ describe('server', () => {
         });
     });
     it('returns placeInQueue and estimatedTime if not evaluated yet', (done) => {
-      spyOn(evaluations, 'get').and.returnValue({ bestMove: undefined });
+      spyOn(evaluations, 'get').and.returnValue(null);
       spyOn(queue, 'checkPlace').and.returnValue({ placeInQueue: 1, estimatedTime: 200000 });
       request(app)
         .get('/fen')

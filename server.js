@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 app.get('/fen', (req, res) => {
   const data = { fen: req.query.fen, depth: req.query.depth };
   const evaluation = evaluations.get(data);
-  if (evaluation.bestMove) {
+  if (evaluation && evaluation.bestMove) {
     res.json(evaluation);
   } else {
     const placeInfo = queue.checkPlace(data);
