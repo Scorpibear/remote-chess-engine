@@ -9,13 +9,19 @@ describe('estimator', () => {
       estimator.estimateQueue([{ depth: 40 }]);
       expect(history.getMeanTime).toHaveBeenCalledWith({ depth: 40 });
     });
-    it('does not allow negative estimations', () => {
-      spyOn(history, 'getMeanTime').and.returnValue(70);
-      spyOn(analyzer, 'getCurrentAnalysisTime').and.returnValue(80);
-      expect(estimator.estimate({ depth: 40 })).toBeGreaterThan(0);
+    it('calls estimate with specified fen and depth', () => {
+      spyOn(estimator, 'estimate').and.stub();
+      estimator.estimateQueue([{ fen: 'qqq', depth: 50 }]);
+      expect(estimator.estimate).toHaveBeenCalledWith({ fen: 'qqq', depth: 50 });
     });
   });
   describe('estimate', () => {
+    it('does not allow negative estimations', () => {
+      spyOn(history, 'getMeanTime').and.returnValue(70);
+      spyOn(analyzer, 'getActiveFen').and.returnValue('abc');
+      spyOn(analyzer, 'getCurrentAnalysisTime').and.returnValue(80);
+      expect(estimator.estimate({ depth: 40, fen: 'abc' })).toBeGreaterThan(0);
+    });
     it('uses getMeanTime', () => {
       spyOn(history, 'getMeanTime').and.returnValue(65);
       expect(estimator.estimate({ fen: 'cdf', depth: 40 })).toEqual(65);
