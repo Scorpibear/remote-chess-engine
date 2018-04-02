@@ -16,10 +16,14 @@ class Queue {
         this.data.push({ fen, depth });
       }
     }
+    return this.checkPlace({ fen, depth });
   }
   checkPlace({ fen, depth }) {
-    const placeInQueue = this.data.findIndex(item =>
-      ((item.fen === fen) && (item.depth === depth)));
+    let placeInQueue = this.data.findIndex(item =>
+      ((item.fen === fen) && (item.depth >= depth)));
+    if (placeInQueue === -1) {
+      placeInQueue = undefined;
+    }
     return { placeInQueue };
   }
 

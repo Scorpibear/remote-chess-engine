@@ -35,6 +35,10 @@ describe('queue', () => {
       queue.add(task);
       expect(queue.toList()).toEqual([task]);
     });
+    it('returns the placeInQueue', () => {
+      const queue = new Queue([task, { fen: 'aaa', depth: 50 }]);
+      expect(queue.add({ fen: 'bcd', depth: 52 })).toEqual({ placeInQueue: 2 });
+    });
   });
   describe('toList', () => {
     it('output modification does not modify queue content', () => {
@@ -62,6 +66,14 @@ describe('queue', () => {
       queue.add({ fen: 'bbbb', depth: 50 });
       const placeInfo = queue.checkPlace({ fen: 'bbbb', depth: 50 });
       expect(placeInfo.placeInQueue).toEqual(1);
+    });
+    it('works if depth in queue is higher', () => {
+      const queue = new Queue([{ fen: 'sss', depth: 50 }]);
+      expect(queue.checkPlace({ fen: 'sss', depth: 40 }).placeInQueue).toEqual(0);
+    });
+    it('skips if depth in queue is lower', () => {
+      const queue = new Queue([{ fen: 'ddd', depth: 40 }]);
+      expect(queue.checkPlace({ fen: 'ddd', depth: 50 }).placeInQueue).toBeUndefined();
     });
   });
   describe('getFirst', () => {
