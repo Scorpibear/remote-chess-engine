@@ -1,11 +1,14 @@
+const config = require('config');
 const express = require('express');
 const queue = require('./main-queue');
 const analyzer = require('./analyzer');
 const evaluations = require('./evaluations');
 const estimator = require('./estimator');
+const serializer = require('./serializer');
 
 const app = express();
-const port = process.env.PORT || 9977;
+const port = config.get('port') || 9977;
+serializer.serializeAll();
 
 app.get('/', (req, res) => {
   res.send('Check <a href="https://github.com/Scorpibear/remote-chess-engine">README</a> for supported API methods.');

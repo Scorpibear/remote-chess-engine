@@ -44,5 +44,12 @@ describe('history', () => {
       history.add({ depth: 50, time: 1234 });
       expect(history.getAllData()).toEqual([[50, [1234]]]);
     });
+    it('emits on change event');
+  });
+  describe('on', () => {
+    it('provides possibility to subscribe');
+  });
+  describe('load', () => {
+    it('loads history from JSON');
   });
 });

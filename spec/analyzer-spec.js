@@ -8,9 +8,11 @@ const history = require('../history');
 
 describe('analyzer', () => {
   describe('push', () => {
+    beforeEach(() => {
+      spyOn(engine.prototype, 'analyzeToDepth').and.stub();
+    });
     it('asks engine to start analysis', () => {
       spyOn(queue, 'getFirst').and.returnValue({ fen: 'aaa', depth: 40 });
-      spyOn(engine.prototype, 'analyzeToDepth').and.stub();
 
       analyzer.push();
 
@@ -64,7 +66,6 @@ describe('analyzer', () => {
       spyOn(global, 'setTimeout').and.stub();
       spyOn(analyzer, 'push').and.stub();
       spyOn(queue, 'getFirst').and.returnValue({ fen: 'abc', depth: 100 });
-      spyOn(engine.prototype, 'analyzeToDepth').and.stub();
       analyzer.analyze().then(() => {
         expect(global.setTimeout).toHaveBeenCalledWith(analyzer.push, 1000);
         done();
@@ -74,6 +75,7 @@ describe('analyzer', () => {
       spyOn(history, 'add').and.stub();
       spyOn(queue, 'getFirst').and.returnValue({ depth: 50, fen: 'abc' });
       spyOn(timer, 'getTimePassed').and.returnValue(600);
+      spyOn(engine.prototype, 'analyzeToDepth').and.stub();
       await analyzer.analyze();
       expect(history.add).toHaveBeenCalledWith({ depth: 50, time: 600 });
     });

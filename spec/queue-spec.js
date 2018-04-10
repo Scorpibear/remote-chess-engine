@@ -39,6 +39,10 @@ describe('queue', () => {
       const queue = new Queue([task, { fen: 'aaa', depth: 50 }]);
       expect(queue.add({ fen: 'bcd', depth: 52 })).toEqual({ placeInQueue: 2 });
     });
+    it('emits on change event');
+  });
+  describe('load', () => {
+    it('loads new queue');
   });
   describe('toList', () => {
     it('output modification does not modify queue content', () => {
