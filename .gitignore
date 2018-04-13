@@ -58,3 +58,8 @@ typings/
 .env
 
 *.exe
+
+# serializable files
+queue.json
+evaluations.json
+history.json
