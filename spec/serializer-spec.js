@@ -31,6 +31,27 @@ describe('serializer', () => {
 
       expect(fs.writeFile).toHaveBeenCalled();
     });
+    it('logs error when error occured during file read', () => {
+      spyOn(console, 'error').and.stub();
+      spyOn(fs, 'existsSync').and.returnValue(true);
+      spyOn(fs, 'readFileSync').and.throwError('file is locked');
+      serializer.serialize(serializable, 'testfile.json');
+      expect(console.error).toHaveBeenCalled();
+    });
+    it('does not work with file if serializable is not specified', () => {
+      spyOn(fs, 'existsSync');
+      serializer.serialize(null, 'testfile');
+      expect(fs.existsSync).not.toHaveBeenCalled();
+    });
+    it('logs error when error occured during file save', () => {
+      spyOn(console, 'error').and.stub();
+      spyOn(fs, 'writeFile').and.throwError('error during file save');
+      let onChange;
+      spyOn(serializable, 'on').and.callFake((event, callback) => { onChange = callback; });
+      serializer.serialize(serializable, 'test.json');
+      onChange();
+      expect(console.error).toHaveBeenCalled();
+    });
   });
   describe('serializeAll', () => {
     it('calls serialize()', () => {
