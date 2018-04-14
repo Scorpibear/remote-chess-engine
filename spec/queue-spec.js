@@ -39,10 +39,19 @@ describe('queue', () => {
       const queue = new Queue([task, { fen: 'aaa', depth: 50 }]);
       expect(queue.add({ fen: 'bcd', depth: 52 })).toEqual({ placeInQueue: 2 });
     });
-    it('emits on change event');
+    it('emits on change event', () => {
+      const queue = new Queue([{ fen: 'emit', depth: 52 }]);
+      spyOn(queue, 'emit');
+      queue.add({ fen: 'new', depth: 54 });
+      expect(queue.emit).toHaveBeenCalledWith('change', queue.toList());
+    });
   });
   describe('load', () => {
-    it('loads new queue');
+    it('loads new queue', () => {
+      const queue = new Queue();
+      queue.load([{ fen: 'new', depth: 50 }]);
+      expect(queue.toList()).toEqual([{ fen: 'new', depth: 50 }]);
+    });
   });
   describe('toList', () => {
     it('output modification does not modify queue content', () => {
