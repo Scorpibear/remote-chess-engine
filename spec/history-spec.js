@@ -50,6 +50,9 @@ describe('history', () => {
     it('provides possibility to subscribe');
   });
   describe('load', () => {
-    it('loads history from JSON');
+    it('loads history from JSON', () => {
+      history.load([[52, [12345]]]);
+      expect(history.getAllData()).toEqual([[52, [12345]]]);
+    });
   });
 });

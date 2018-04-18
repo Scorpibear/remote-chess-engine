@@ -1,4 +1,4 @@
-const timeMap = new Map(); // depth => [time1, time2, ...]
+let timeMap = new Map(); // depth => [time1, time2, ...]
 
 exports.clear = () => {
   timeMap.clear();
@@ -24,4 +24,8 @@ exports.add = ({ depth, time }) => {
   } else {
     timeMap.set(depth, [time]);
   }
+};
+
+exports.load = (data) => {
+  timeMap = new Map(data);
 };
