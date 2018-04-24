@@ -29,7 +29,7 @@ app.post('/fen', (req, res) => {
   req.on('data', (chunk) => {
     try {
       const data = JSON.parse(chunk);
-      const queueInfo = queue.add({ fen: data.fen, depth: data.depth });
+      const queueInfo = queue.add({ fen: data.fen, depth: data.depth, pingUrl: data.pingUrl });
       res.send(queueInfo);
       analyzer.push();
     } catch (err) {

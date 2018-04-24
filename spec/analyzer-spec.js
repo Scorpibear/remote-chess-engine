@@ -95,5 +95,6 @@ describe('analyzer', () => {
         fen: 'bbb', depth: 50, bestMove: 'Nf3', score: 123
       });
     });
+    it('send POST request to ping url after saving analysis');
   });
 });
