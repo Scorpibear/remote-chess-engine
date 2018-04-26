@@ -1,4 +1,4 @@
-const history = require('./history');
+const history = require('./all-history');
 const analyzer = require('./analyzer');
 
 const defaultTime = 20 * 60; // 20 minutes in seconds

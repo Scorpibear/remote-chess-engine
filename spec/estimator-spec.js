@@ -1,5 +1,5 @@
 const estimator = require('../estimator');
-const history = require('../history');
+const history = require('../all-history');
 const analyzer = require('../analyzer');
 
 describe('estimator', () => {

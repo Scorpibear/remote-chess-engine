@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../server');
 const queue = require('../main-queue');
 const analyzer = require('../analyzer');
-const evaluations = require('../evaluations');
+const evaluations = require('../all-evaluations');
 const estimator = require('../estimator');
 
 describe('server', () => {

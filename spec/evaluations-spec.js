@@ -1,6 +1,7 @@
-const evaluations = require('../evaluations');
+const Evaluations = require('../evaluations');
 
 describe('evaluations', () => {
+  const evaluations = new Evaluations();
   describe('get', () => {
     it('returns undefined for unknown evaluations', () => {
       expect(evaluations.get({ fen: 'abc' })).toBeUndefined();

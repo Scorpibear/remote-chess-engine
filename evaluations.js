@@ -1,10 +1,21 @@
-const data = new Map();
+const EventEmitter = require('events');
 
-exports.get = ({ fen }) => data.get(fen);
+class Evaluations extends EventEmitter {
+  constructor(init) {
+    super();
+    this.data = new Map(init);
+  }
+  
+  get({ fen }) {
+    return this.data.get(fen);
+  }
 
-exports.save = ({
-  fen, depth, bestMove, score
-}) => {
-  console.log(`save evaluation for '${fen}': depth: ${depth}, bestMove: ${bestMove}, score: ${score}`);
-  data.set(fen, { depth, bestMove, score });
-};
+  save({
+    fen, depth, bestMove, score
+  }) {
+    console.log(`save evaluation for '${fen}': depth: ${depth}, bestMove: ${bestMove}, score: ${score}`);
+    this.data.set(fen, { depth, bestMove, score });
+  }
+}
+
+module.exports = Evaluations;

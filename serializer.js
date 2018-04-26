@@ -1,8 +1,8 @@
 const config = require('config');
 const fs = require('fs');
 
-const evaluations = require('./evaluations');
-const history = require('./history');
+const evaluations = require('./all-evaluations');
+const history = require('./all-history');
 const queue = require('./main-queue');
 
 module.exports.serialize = (serializable, fileName) => {

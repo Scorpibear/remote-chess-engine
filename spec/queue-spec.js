@@ -53,6 +53,16 @@ describe('queue', () => {
       expect(queue.toList()).toEqual([{ fen: 'new', depth: 50 }]);
     });
   });
+  describe('on', () => {
+    it('allows to subscribe to change event', () => {
+      const listener = { onChange: () => {} };
+      spyOn(listener, 'onChange');
+      const queue = new Queue();
+      queue.on('change', listener.onChange);
+      queue.add({ fen: 'abc', depth: 50 });
+      expect(listener.onChange).toHaveBeenCalled();
+    });
+  });
   describe('toList', () => {
     it('output modification does not modify queue content', () => {
       const queue = new Queue();

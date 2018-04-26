@@ -1,8 +1,9 @@
-const history = require('../history');
+const History = require('../history');
 
 describe('history', () => {
+  let history;
   beforeEach(() => {
-    history.clear();
+    history = new History();
   });
   describe('clear', () => {
     it('clears history', () => {
@@ -37,6 +38,7 @@ describe('history', () => {
       history.add({ depth: 62, time: 60 });
       expect(history.getMeanTime({ depth: 62 })).toBe(4);
     });
+    it('considers # of pieces in position');
   });
   describe('add', () => {
     it('saves the data', () => {
@@ -47,7 +49,13 @@ describe('history', () => {
     it('emits on change event');
   });
   describe('on', () => {
-    it('provides possibility to subscribe');
+    it('provides possibility to subscribe', () => {
+      const listener = { onChange: () => {} };
+      spyOn(listener, 'onChange');
+      history.on('change', listener.onChange);
+      history.add({ depth: 50, time: 1234, pieces: 7 });
+      expect(listener.onChange).toHaveBeenCalled();
+    });
   });
   describe('load', () => {
     it('loads history from JSON', () => {

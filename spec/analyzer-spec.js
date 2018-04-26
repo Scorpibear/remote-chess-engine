@@ -2,9 +2,9 @@ const engine = require('uci-adapter');
 
 const analyzer = require('../analyzer');
 const queue = require('../main-queue');
-const evaluations = require('../evaluations');
+const evaluations = require('../all-evaluations');
 const timer = require('../timer');
-const history = require('../history');
+const history = require('../all-history');
 
 describe('analyzer', () => {
   describe('push', () => {
