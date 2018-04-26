@@ -5,7 +5,7 @@ class Evaluations extends EventEmitter {
     super();
     this.data = new Map(init);
   }
-  
+
   get({ fen }) {
     return this.data.get(fen);
   }
