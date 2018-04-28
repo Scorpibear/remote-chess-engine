@@ -3,7 +3,8 @@ const EventEmitter = require('events');
 class History extends EventEmitter {
   constructor(initData) {
     super();
-    this.timeMap = new Map(initData); // [depth1, [pieces1, [time1, time2, ...], pieces2: [time3, time4, ...]]
+    this.timeMap = new Map();
+    this.load(initData);
   }
 
   clear() {
