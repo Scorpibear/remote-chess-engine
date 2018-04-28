@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 class History extends EventEmitter {
   constructor(initData) {
     super();
-    this.timeMap = new Map(initData); // depth => [time1, time2, ...]
+    this.timeMap = new Map(initData); // [depth1, [pieces1, [time1, time2, ...], pieces2: [time3, time4, ...]]
   }
 
   clear() {
@@ -11,8 +11,9 @@ class History extends EventEmitter {
     this.emitChangeEvent();
   }
 
-  getMeanTime({ depth }) {
-    const data = this.timeMap.get(depth);
+  getMeanTime({ depth, pieces = 32 }) {
+    const timeForPieces = this.timeMap.get(depth);
+    const data = timeForPieces.get(pieces);
     if (data) {
       if (data.length % 2 === 1) {
         return data[Math.floor(data.length / 2)];
@@ -23,17 +24,28 @@ class History extends EventEmitter {
   }
 
   getAllData() {
-    return Array.from(this.timeMap);
+    const allData = [];
+    this.timeMap.forEach((value, key) => {
+      allData.push([key, [...value]]);
+    });
+    return allData;
   }
 
-  add({ depth, time }) {
-    if (this.timeMap.has(depth)) {
-      const timeData = this.timeMap.get(depth);
+  add({ depth, pieces = 32, time }) {
+    try {
+      if (!this.timeMap.has(depth)) {
+        this.timeMap.set(depth, new Map());
+      }
+      const timeForPieces = this.timeMap.get(depth);
+      if (!timeForPieces.has(pieces)) {
+        timeForPieces.set(pieces, []);
+      }
+      const timeData = timeForPieces.get(pieces);
       timeData.push(time);
-    } else {
-      this.timeMap.set(depth, [time]);
+      this.emitChangeEvent();
+    } catch (err) {
+      console.error(`could not add data ${{ depth, pieces, time }} to history`, err);
     }
-    this.emitChangeEvent();
   }
 
   emitChangeEvent() {
@@ -41,7 +53,15 @@ class History extends EventEmitter {
   }
 
   load(data) {
-    this.timeMap = new Map(data);
+    try {
+      const map = new Map(data);
+      map.forEach((value, key) => {
+        map.set(key, new Map(value));
+      });
+      this.timeMap = map;
+    } catch (err) {
+      console.error(`could not load history from '${data}'`, err);
+    }
   }
 }
 
