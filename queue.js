@@ -1,10 +1,6 @@
-const EventEmitter = require('events');
+const Serializable = require('./serializable');
 
-class Queue extends EventEmitter {
-  constructor(initData) {
-    super();
-    this.data = initData ? initData.slice() : [];
-  }
+class Queue extends Serializable {
   add({ fen, depth }) {
     console.log('adding ', { fen, depth });
     if (fen && depth) {
@@ -12,13 +8,13 @@ class Queue extends EventEmitter {
       if (placeInQueue >= 0) {
         if (this.data[placeInQueue].depth < depth) {
           this.data[placeInQueue].depth = depth;
-          this.emitChange();
+          this.emitChangeEvent();
         } else {
           // do nothing as item is in queue with good depth
         }
       } else {
         this.data.push({ fen, depth });
-        this.emitChange();
+        this.emitChangeEvent();
       }
     }
     return this.checkPlace({ fen, depth });
@@ -35,12 +31,8 @@ class Queue extends EventEmitter {
   delete({ fen }) {
     const placeInQueue = this.data.findIndex(item => (item.fen === fen));
     if (this.data.splice(placeInQueue, 1)) {
-      this.emitChange();
+      this.emitChangeEvent();
     }
-  }
-
-  emitChange() {
-    this.emit('change', this.data);
   }
 
   getFirst() {
@@ -52,6 +44,10 @@ class Queue extends EventEmitter {
   }
 
   toList() {
+    return this.getAllData();
+  }
+
+  getAllData() {
     return this.data.slice();
   }
 }

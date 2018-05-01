@@ -1,12 +1,6 @@
-const EventEmitter = require('events');
+const Serializable = require('./serializable');
 
-class History extends EventEmitter {
-  constructor(initData) {
-    super();
-    this.timeMap = new Map();
-    this.load(initData);
-  }
-
+class History extends Serializable {
   clear() {
     this.timeMap.clear();
     this.emitChangeEvent();
@@ -47,10 +41,6 @@ class History extends EventEmitter {
     } catch (err) {
       console.error(`could not add data ${{ depth, pieces, time }} to history`, err);
     }
-  }
-
-  emitChangeEvent() {
-    this.emit('change', this.getAllData());
   }
 
   load(data) {

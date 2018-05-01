@@ -73,15 +73,6 @@ describe('history', () => {
       expect(history.emitChangeEvent).toHaveBeenCalled();
     });
   });
-  describe('on', () => {
-    it('provides possibility to subscribe', () => {
-      const listener = { onChange: () => {} };
-      spyOn(listener, 'onChange');
-      history.on('change', listener.onChange);
-      history.add({ depth: 50, time: 1234, pieces: 7 });
-      expect(listener.onChange).toHaveBeenCalled();
-    });
-  });
   describe('load', () => {
     it('loads history from JSON', () => {
       history.load([[52, [[32, [12345]]]]]);
