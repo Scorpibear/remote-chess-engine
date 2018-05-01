@@ -1,11 +1,14 @@
+const config = require('config');
 const express = require('express');
 const queue = require('./main-queue');
 const analyzer = require('./analyzer');
-const evaluations = require('./evaluations');
+const evaluations = require('./all-evaluations');
 const estimator = require('./estimator');
+const serializer = require('./serializer');
 
 const app = express();
-const port = process.env.PORT || 9977;
+const port = config.get('port') || 9977;
+serializer.serializeAll();
 
 app.get('/', (req, res) => {
   res.send('Check <a href="https://github.com/Scorpibear/remote-chess-engine">README</a> for supported API methods.');
@@ -13,6 +16,7 @@ app.get('/', (req, res) => {
 
 app.get('/fen', (req, res) => {
   const data = { fen: req.query.fen, depth: req.query.depth };
+  console.log(`GET /fen ${data}`);
   const evaluation = evaluations.get(data);
   if (evaluation && evaluation.bestMove) {
     res.json(evaluation);
@@ -26,7 +30,8 @@ app.post('/fen', (req, res) => {
   req.on('data', (chunk) => {
     try {
       const data = JSON.parse(chunk);
-      const queueInfo = queue.add({ fen: data.fen, depth: data.depth });
+      console.log(`POST /fen ${data}`);
+      const queueInfo = queue.add({ fen: data.fen, depth: data.depth, pingUrl: data.pingUrl });
       res.send(queueInfo);
       analyzer.push();
     } catch (err) {
@@ -39,6 +44,7 @@ app.delete('/fen', (req, res) => {
   req.on('data', (chunk) => {
     try {
       const data = JSON.parse(chunk);
+      console.log(`DELETE /fen ${data}`);
       queue.delete(data.fen);
       res.send();
     } catch (err) {
@@ -48,6 +54,7 @@ app.delete('/fen', (req, res) => {
 });
 
 app.get('/queue', (req, res) => {
+  console.log('GET /queue');
   const queueData = queue.toList();
   const queueDataEstimated = estimator.estimateQueue(queueData);
   res.send(queueDataEstimated);

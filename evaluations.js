@@ -1,10 +1,25 @@
-const data = new Map();
+const Serializable = require('./serializable');
 
-exports.get = ({ fen }) => data.get(fen);
+class Evaluations extends Serializable {
+  get({ fen }) {
+    return this.data.get(fen);
+  }
 
-exports.save = ({
-  fen, depth, bestMove, score
-}) => {
-  console.log(`save evaluation for '${fen}': depth: ${depth}, bestMove: ${bestMove}, score: ${score}`);
-  data.set(fen, { depth, bestMove, score });
-};
+  load(data) {
+    this.data = new Map(data);
+  }
+
+  save({
+    fen, depth, bestMove, score
+  }) {
+    console.log(`save evaluation for '${fen}': depth: ${depth}, bestMove: ${bestMove}, score: ${score}`);
+    this.data.set(fen, { depth, bestMove, score });
+    this.emitChangeEvent();
+  }
+
+  getAllData() {
+    return [...this.data];
+  }
+}
+
+module.exports = Evaluations;

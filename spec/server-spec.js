@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../server');
 const queue = require('../main-queue');
 const analyzer = require('../analyzer');
-const evaluations = require('../evaluations');
+const evaluations = require('../all-evaluations');
 const estimator = require('../estimator');
 
 describe('server', () => {
@@ -50,16 +50,16 @@ describe('server', () => {
   });
 
   describe('POST /fen', () => {
-    it('adds fen to queue for analysis', (done) => {
+    it('adds fen, depth and pingUrl to queue for analysis', (done) => {
       spyOn(queue, 'add').and.stub();
 
       request(app)
         .post('/fen')
-        .send({ fen, depth: 40 })
+        .send({ fen, depth: 40, pingUrl: 'http://example.com/api/ping' })
         .expect(200)
         .end((err) => {
           if (err) done(err);
-          expect(queue.add).toHaveBeenCalledWith({ fen, depth: 40 });
+          expect(queue.add).toHaveBeenCalledWith({ fen, depth: 40, pingUrl: 'http://example.com/api/ping' });
           done();
         });
     });
@@ -89,6 +89,7 @@ describe('server', () => {
       request(app)
         .post('/fen').send({ fen, depth: 5 })
         .end((err, res) => {
+          if (err) done(err);
           expect(res.body.estimatedTime).toBe(1234567);
           done();
         });

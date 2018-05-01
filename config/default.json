@@ -1,4 +1,8 @@
 {
   "pathToEngine": "stockfish_9_x64.exe",
-  "port": 9977
+  "uciOptions": [{"name":"Threads", "value":3}, {"name": "Hash", "value": 4096}],
+  "port": 9977,
+  "evaluationsFile": "evaluations.json",
+  "queueFile": "queue.json",
+  "historyFile": "history.json"
 }

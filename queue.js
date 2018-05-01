@@ -1,7 +1,6 @@
-class Queue {
-  constructor(initData) {
-    this.data = initData ? initData.slice() : [];
-  }
+const Serializable = require('./serializable');
+
+class Queue extends Serializable {
   add({ fen, depth }) {
     console.log('adding ', { fen, depth });
     if (fen && depth) {
@@ -9,11 +8,13 @@ class Queue {
       if (placeInQueue >= 0) {
         if (this.data[placeInQueue].depth < depth) {
           this.data[placeInQueue].depth = depth;
+          this.emitChangeEvent();
         } else {
           // do nothing as item is in queue with good depth
         }
       } else {
         this.data.push({ fen, depth });
+        this.emitChangeEvent();
       }
     }
     return this.checkPlace({ fen, depth });
@@ -29,14 +30,24 @@ class Queue {
 
   delete({ fen }) {
     const placeInQueue = this.data.findIndex(item => (item.fen === fen));
-    this.data.splice(placeInQueue, 1);
+    if (this.data.splice(placeInQueue, 1)) {
+      this.emitChangeEvent();
+    }
   }
 
   getFirst() {
     return this.data.length ? this.data[0] : null;
   }
 
+  load(data) {
+    this.data = data ? data.slice() : [];
+  }
+
   toList() {
+    return this.getAllData();
+  }
+
+  getAllData() {
     return this.data.slice();
   }
 }

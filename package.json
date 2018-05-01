@@ -39,5 +39,8 @@
     "config": "^1.30.0",
     "express": "^4.16.2",
     "uci-adapter": "github:Scorpibear/uci-adapter"
+  },
+  "nodemonConfig": {
+    "ignore": ["*.json"]
   }
 }

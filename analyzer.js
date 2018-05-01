@@ -2,8 +2,8 @@ const Engine = require('uci-adapter');
 const config = require('config');
 
 const queue = require('./main-queue');
-const evaluations = require('./evaluations');
-const history = require('./history');
+const evaluations = require('./all-evaluations');
+const history = require('./all-history');
 const timer = require('./timer');
 
 const PAUSE_BETWEEN_ANALYSIS = 1000; // 1000 miliseconds
@@ -37,7 +37,11 @@ exports.analyze = async () => {
 
 exports.push = async () => {
   if (task === null) {
-    await this.analyze();
+    try {
+      await this.analyze();
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
 
