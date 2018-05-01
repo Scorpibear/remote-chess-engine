@@ -59,6 +59,9 @@ describe('history', () => {
       history.add({ depth: 50, pieces: 10, time: 2 });
       expect(history.getMeanTime({ depth: 50, pieces: 30 })).toBe(10);
     });
+    it('returns undefined if history is empty', () => {
+      expect(history.getMeanTime({ depth: 66 })).toBeUndefined();
+    });
     it('uses mean of neighbor pieces time if no data for specific # of pieces');
   });
   describe('add', () => {
@@ -77,6 +80,11 @@ describe('history', () => {
     it('loads history from JSON', () => {
       history.load([[52, [[32, [12345]]]]]);
       expect(history.getAllData()).toEqual([[52, [[32, [12345]]]]]);
+    });
+    it('throws error if data is wrong', () => {
+      spyOn(console, 'error').and.stub();
+      history.load({ something: 'wrong' });
+      expect(console.error).toHaveBeenCalled();
     });
   });
 });
