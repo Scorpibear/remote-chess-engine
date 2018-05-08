@@ -9,7 +9,10 @@ const evaluations = require('./all-evaluations');
  *   results: { bestmove, info: [{ score: { value }}]}
  */
 module.exports.process = ({ task, results }) => {
-  if (results && results.info && results.info.length) {
+  if (results && results.bestmove && results.info && results.info.length &&
+    results.info[results.info.length - 1].score &&
+    'value' in results.info[results.info.length - 1].score
+  ) {
     evaluations.save({
       fen: task.fen,
       depth: task.depth,
@@ -21,5 +24,7 @@ module.exports.process = ({ task, results }) => {
         console.error(`Got error while pinging via '${task.pingUrl}': ${err.message}`);
       });
     }
+  } else {
+    console.error(`Incorrect format of results, got '${results}', expected '{ bestmove, info: [{ score: { value }}]}'`);
   }
 };
