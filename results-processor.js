@@ -4,9 +4,9 @@ const evaluations = require('./all-evaluations');
 
 /**
  * process results of engine analysis
- * 
- * @param {*} task - object with { fen, depth, pingUrl }
- * @param {*} results - output of engine.analyzeToDepth
+ *
+ * @param {*} data  - { task: { fen, depth, pingUrl },
+ *   results: { bestmove, info: [{ score: { value }}]}
  */
 module.exports.process = ({ task, results }) => {
   if (results && results.info && results.info.length) {
