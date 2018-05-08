@@ -2,9 +2,9 @@ const engine = require('uci-adapter');
 
 const analyzer = require('../analyzer');
 const queue = require('../main-queue');
-const evaluations = require('../all-evaluations');
 const timer = require('../timer');
 const history = require('../all-history');
+const resultsProcessor = require('../results-processor');
 
 describe('analyzer', () => {
   describe('push', () => {
@@ -86,15 +86,18 @@ describe('analyzer', () => {
       await analyzer.analyze();
       expect(queue.delete).toHaveBeenCalledWith({ fen: 'b' });
     });
-    it('saves evaluation', async () => {
-      spyOn(engine.prototype, 'analyzeToDepth').and.returnValue(Promise.resolve({ bestmove: 'Nf3', info: [{ score: { value: 123 } }] }));
-      spyOn(evaluations, 'save').and.stub();
-      spyOn(queue, 'getFirst').and.returnValue({ fen: 'bbb', depth: 50 });
-      await analyzer.analyze();
-      expect(evaluations.save).toHaveBeenCalledWith({
-        fen: 'bbb', depth: 50, bestMove: 'Nf3', score: 123
+    it('process results', (done) => {
+      const results = { info: [{ score: { value: 10 } }] };
+      const task = { fen: 'some', depth: 100, pingUrl: 'http://some.url' };
+      spyOn(queue, 'getFirst').and.returnValue(task);
+      spyOn(engine.prototype, 'analyzeToDepth').and.returnValue(Promise.resolve(results));
+      spyOn(resultsProcessor, 'process').and.stub();
+      analyzer.analyze().then(() => {
+        expect(resultsProcessor.process).toHaveBeenCalledWith({ task, results });
+        done();
+      }).catch((err) => {
+        done(err);
       });
     });
-    it('send POST request to ping url after saving analysis');
   });
 });

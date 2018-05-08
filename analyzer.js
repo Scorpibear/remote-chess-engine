@@ -2,9 +2,9 @@ const Engine = require('uci-adapter');
 const config = require('config');
 
 const queue = require('./main-queue');
-const evaluations = require('./all-evaluations');
 const history = require('./all-history');
 const timer = require('./timer');
+const resultsProcessor = require('./results-processor');
 
 const PAUSE_BETWEEN_ANALYSIS = 1000; // 1000 miliseconds
 
@@ -16,15 +16,8 @@ exports.analyze = async () => {
     timer.start();
     const engine = new Engine(config.get('pathToEngine'));
     try {
-      const result = await engine.analyzeToDepth(task.fen, task.depth);
-      if (result) {
-        evaluations.save({
-          fen: task.fen,
-          depth: task.depth,
-          bestMove: result.bestmove,
-          score: result.info[result.info.length - 1].score.value
-        });
-      }
+      const results = await engine.analyzeToDepth(task.fen, task.depth);
+      resultsProcessor.process({ task, results });
     } catch (err) {
       console.error(err);
     }

@@ -15,7 +15,7 @@ API
 **POST /fen** - posts fen for analysis with specified depth at the end of a queue, triggers analysis from the top of queue if nothing is being analyzed now
   - fen - FEN of chess position
   - depth - depth to analyze
-  - pingUrl - url to execute post call when analysis finished
+  - pingUrl - url to execute get call when analysis finished
   - returns place in queue starting from 0 and estimated time to analyze ({placeInQueue, estimatedTime})
 
 **DELETE /fen** - delete specified fen from the queue. Input - **fen**.
