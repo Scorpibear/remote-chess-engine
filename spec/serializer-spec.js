@@ -45,7 +45,7 @@ describe('serializer', () => {
     });
     it('logs error when error occured during file save', () => {
       spyOn(console, 'error').and.stub();
-      spyOn(fs, 'writeFile').and.throwError('error during file save');
+      spyOn(fs, 'writeFile').and.callFake((filename, data, callback) => { callback('save error'); });
       let onChange;
       spyOn(serializable, 'on').and.callFake((event, callback) => { onChange = callback; });
       serializer.serialize(serializable, 'test.json');

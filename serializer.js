@@ -17,11 +17,11 @@ module.exports.serialize = (serializable, fileName) => {
     }
     if (serializable.on) {
       serializable.on('change', (data) => {
-        try {
-          fs.writeFile(fileName, JSON.stringify(data, 2));
-        } catch (err) {
-          console.error(`Could not save to '${fileName}':`, err);
-        }
+        fs.writeFile(fileName, JSON.stringify(data, 2), (err) => {
+          if (err) {
+            console.error(`Could not save to '${fileName}':`, err);
+          }
+        });
       });
     }
   }
