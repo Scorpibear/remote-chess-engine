@@ -6,14 +6,25 @@ const resultsProcessor = require('../results-processor');
 describe('resultsProcessor', () => {
   describe('process', () => {
     const pingUrl = 'http://pingurl.com/api/ping';
-    const task = { fen: 'ccc', depth: 10, pingUrl };
-    const results = { bestmove: 'Nf3', info: [{ score: { value: 123 } }] };
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+    const bestMove = 'Nf6';
+    const task = { fen, depth: 10, pingUrl };
+    const score = -1.23;
+    const depth = 10;
+    const results = { bestmove: bestMove, info: [{ score: { value: 123 } }] };
 
-    it('saves evaluation', async () => {
+    it('saves evaluation with adjusted score', async () => {
       spyOn(evaluations, 'save').and.stub();
       resultsProcessor.process({ task, results });
       expect(evaluations.save).toHaveBeenCalledWith({
-        fen: 'ccc', depth: 10, bestMove: 'Nf3', score: 123
+        fen, depth: 10, bestMove, score: -1.23
+      });
+    });
+    it('transforms extended algebraic notation to short one', () => {
+      spyOn(evaluations, 'save').and.stub();
+      resultsProcessor.process({ task, results: { bestmove: 'd5e4', info: results.info } });
+      expect(evaluations.save).toHaveBeenCalledWith({
+        fen, depth, bestMove: 'dxe4', score
       });
     });
     it('send POST request to ping url after saving analysis', () => {
@@ -23,7 +34,7 @@ describe('resultsProcessor', () => {
     });
     it('do not call http.get if no pingUrl', () => {
       spyOn(http, 'get').and.returnValue({ on: () => {} });
-      resultsProcessor.process({ task: { fen: 'abc', depth: 100 }, results });
+      resultsProcessor.process({ task: { fen, depth: 100 }, results });
       expect(http.get).not.toHaveBeenCalled();
     });
     it('logs error if no score object in results.info[0]', () => {

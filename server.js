@@ -16,9 +16,10 @@ app.get('/', (req, res) => {
 
 app.get('/fen', (req, res) => {
   const data = { fen: req.query.fen, depth: req.query.depth };
-  console.log(`GET /fen ${data}`);
+  console.log('GET /fen with ', data);
   const evaluation = evaluations.get(data);
   if (evaluation && evaluation.bestMove) {
+    console.log('sending ready evalution: ', evaluation);
     res.json(evaluation);
   } else {
     const placeInfo = queue.checkPlace(data);
