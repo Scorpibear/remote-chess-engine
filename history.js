@@ -9,7 +9,12 @@ class History extends Serializable {
   getMeanTime({ depth, pieces = 32 }) {
     const timeForPieces = this.timeMap.get(depth);
     if (timeForPieces) {
-      const data = timeForPieces.get(pieces);
+      let data = timeForPieces.get(pieces);
+      let tryPieces = pieces;
+      while (!data && tryPieces < 32) {
+        tryPieces += 1;
+        data = timeForPieces.get(tryPieces);
+      }
       if (data) {
         if (data.length % 2 === 1) {
           return data[Math.floor(data.length / 2)];

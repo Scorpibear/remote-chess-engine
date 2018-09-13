@@ -62,7 +62,10 @@ describe('history', () => {
     it('returns undefined if history is empty', () => {
       expect(history.getMeanTime({ depth: 66 })).toBeUndefined();
     });
-    it('uses mean of neighbor pieces time if no data for specific # of pieces');
+    it('uses neighbor pieces time if no data for specific # of pieces', () => {
+      history.add({ depth: 50, pieces: 20, time: 100 });
+      expect(history.getMeanTime({ depth: 50, pieces: 19 })).toBe(100);
+    });
   });
   describe('add', () => {
     it('saves the data', () => {
