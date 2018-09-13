@@ -1,14 +1,19 @@
 const config = require('config');
 const express = require('express');
+
+const Analyzer = require('./analyzer');
+const Estimator = require('./estimator');
+
 const queue = require('./main-queue');
-const analyzer = require('./analyzer');
 const evaluations = require('./all-evaluations');
-const estimator = require('./estimator');
 const serializer = require('./serializer');
 
 const app = express();
 const port = config.get('port') || 9977;
 serializer.serializeAll();
+
+const analyzer = new Analyzer();
+const estimator = new Estimator({ analyzer });
 
 app.get('/', (req, res) => {
   res.send('Check <a href="https://github.com/Scorpibear/remote-chess-engine">README</a> for supported API methods.');
@@ -23,7 +28,7 @@ app.get('/fen', (req, res) => {
     res.json(evaluation);
   } else {
     const placeInfo = queue.checkPlace(data);
-    res.json({ placeInQueue: placeInfo.placeInQueue, estimatedTime: placeInfo.estimatedTime });
+    res.json({ placeInQueue: placeInfo.placeInQueue, estimatedTime: estimator.estimate(data) });
   }
 });
 
@@ -62,6 +67,8 @@ app.get('/queue', (req, res) => {
 });
 
 const server = app.listen(port);
+
+Object.assign(server, { analyzer, estimator });
 
 console.log(`remote chess engine started at port ${port}`);
 

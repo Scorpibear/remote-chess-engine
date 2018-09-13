@@ -1,8 +1,9 @@
 {
   "name": "remote-chess-engine",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)",
   "main": "server.js",
+  "bin": "server.js",
   "scripts": {
     "test": "jasmine",
     "tdd": "nodemon --exec jasmine",
@@ -26,10 +27,10 @@
     "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
-    "jasmine": "^2.8.0",
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.99.0",
     "nodemon": "^1.12.1",
-    "supertest": "^3.0.0",
-    "istanbul": "^0.4.5"
+    "supertest": "^3.0.0"
   },
   "repository": {
     "type": "git",

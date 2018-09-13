@@ -8,36 +8,47 @@ const resultsProcessor = require('./results-processor');
 
 const PAUSE_BETWEEN_ANALYSIS = 1000; // 1000 miliseconds
 
-let task = null;
-
-exports.analyze = async () => {
-  task = queue.getFirst();
-  if (task) {
-    timer.start();
-    const engine = new Engine(config.get('pathToEngine'));
-    try {
-      const results = await engine.analyzeToDepth(task.fen, task.depth);
-      resultsProcessor.process({ task, results });
-    } catch (err) {
-      console.error(err);
-    }
-    queue.delete({ fen: task.fen });
-    history.add({ depth: task.depth, time: timer.getTimePassed() });
-    setTimeout(this.push, PAUSE_BETWEEN_ANALYSIS);
+class Analyzer {
+  constructor() {
+    this.timer = timer;
+    this.task = null;
   }
-  task = null;
-};
+  async analyze() {
+    this.task = queue.getFirst();
+    if (this.task) {
+      this.timer.start();
+      const engine = new Engine(config.get('pathToEngine'));
+      try {
+        await engine.setUciOptions(config.uciOptions);
+        const results = await engine.analyzeToDepth(this.task.fen, this.task.depth);
+        resultsProcessor.process({ task: this.task, results });
+      } catch (err) {
+        console.error(err);
+      }
+      queue.delete({ fen: this.task.fen });
+      history.add({ depth: this.task.depth, time: this.timer.getTimePassed() });
+      setTimeout(this.push, PAUSE_BETWEEN_ANALYSIS);
+    }
+    this.task = null;
+  }
 
-exports.push = async () => {
-  if (task === null) {
-    try {
-      await this.analyze();
-    } catch (err) {
-      console.error(err);
+  async push() {
+    if (this.task === null) {
+      try {
+        await this.analyze();
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
-};
 
-exports.getCurrentAnalysisTime = () => timer.getTimePassed();
+  get currentAnalysisTime() {
+    return this.timer.getTimePassed();
+  }
 
-exports.getActiveFen = () => (task ? task.fen : null);
+  get activeFen() {
+    return this.task ? this.task.fen : null;
+  }
+}
+
+module.exports = Analyzer;

@@ -1,9 +1,7 @@
 const request = require('supertest');
-const app = require('../server');
+const server = require('../server');
 const queue = require('../main-queue');
-const analyzer = require('../analyzer');
 const evaluations = require('../all-evaluations');
-const estimator = require('../estimator');
 
 describe('server', () => {
   const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -11,7 +9,7 @@ describe('server', () => {
   describe('GET /fen', () => {
     it('returns bestMove and depth for evaluated fens', (done) => {
       spyOn(evaluations, 'get').and.returnValue({ bestMove: 'e4', depth: 35 });
-      request(app)
+      request(server)
         .get('/fen')
         .send({ fen, depth: 33 })
         .end((err, res) => {
@@ -23,8 +21,9 @@ describe('server', () => {
     });
     it('returns placeInQueue and estimatedTime if not evaluated yet', (done) => {
       spyOn(evaluations, 'get').and.returnValue(null);
-      spyOn(queue, 'checkPlace').and.returnValue({ placeInQueue: 1, estimatedTime: 200000 });
-      request(app)
+      spyOn(queue, 'checkPlace').and.returnValue({ placeInQueue: 1 });
+      spyOn(server.estimator, 'estimate').and.returnValue(200000);
+      request(server)
         .get('/fen')
         .send({ fen, depth: 33 })
         .end((err, res) => {
@@ -38,7 +37,7 @@ describe('server', () => {
     it('returns placeInQueue undefined if not added to queue for analysis yet', (done) => {
       spyOn(evaluations, 'get').and.returnValue({ bestMove: undefined });
       spyOn(queue, 'checkPlace').and.returnValue({ placeInQueue: undefined, estimatedTime: undefined });
-      request(app)
+      request(server)
         .get('/fen')
         .send({ fen, depth: 33 })
         .end((err, res) => {
@@ -53,7 +52,7 @@ describe('server', () => {
     it('adds fen, depth and pingUrl to queue for analysis', (done) => {
       spyOn(queue, 'add').and.stub();
 
-      request(app)
+      request(server)
         .post('/fen')
         .send({ fen, depth: 40, pingUrl: 'http://example.com/api/ping' })
         .expect(200)
@@ -64,19 +63,19 @@ describe('server', () => {
         });
     });
     it('triggers analysis from the top of the queue', (done) => {
-      spyOn(analyzer, 'push').and.stub();
-      request(app)
+      spyOn(server.analyzer, 'push').and.stub();
+      request(server)
         .post('/fen')
         .send({ fen, depth: 40 })
         .end((err) => {
           if (err) done(err);
-          expect(analyzer.push).toHaveBeenCalled();
+          expect(server.analyzer.push).toHaveBeenCalled();
           done();
         });
     });
     it('returns place in queue', (done) => {
       spyOn(queue, 'add').and.returnValue({ placeInQueue: 3 });
-      request(app)
+      request(server)
         .post('/fen').send({ fen, depth: 40 })
         .end((err, res) => {
           if (err) done(err);
@@ -86,7 +85,7 @@ describe('server', () => {
     });
     it('returns estimated time to analyze', (done) => {
       spyOn(queue, 'add').and.returnValue({ estimatedTime: 1234567 });
-      request(app)
+      request(server)
         .post('/fen').send({ fen, depth: 5 })
         .end((err, res) => {
           if (err) done(err);
@@ -98,7 +97,7 @@ describe('server', () => {
   describe('DELETE /fen', () => {
     it('delete specified fen from the queue', (done) => {
       spyOn(queue, 'delete');
-      request(app)
+      request(server)
         .delete('/fen').send({ fen })
         .expect(200)
         .end((err) => {
@@ -113,14 +112,14 @@ describe('server', () => {
       const queueData = [{ fen, depth: 50 }];
       const queueDataEstimated = [{ fen, depth: 50, estimatedTime: '0:05:34' }];
       spyOn(queue, 'toList').and.returnValue(queueData);
-      spyOn(estimator, 'estimateQueue').and.returnValue(queueDataEstimated);
-      request(app)
+      spyOn(server.estimator, 'estimateQueue').and.returnValue(queueDataEstimated);
+      request(server)
         .get('/queue')
         .expect(200)
         .end((err, res) => {
           if (err) done(err);
           expect(res.body).toEqual(queueDataEstimated);
-          expect(estimator.estimateQueue).toHaveBeenCalledWith(queueData);
+          expect(server.estimator.estimateQueue).toHaveBeenCalledWith(queueData);
           done();
         });
     });

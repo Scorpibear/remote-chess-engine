@@ -1,22 +1,29 @@
-const engine = require('uci-adapter');
+const Engine = require('uci-adapter');
 
-const analyzer = require('../analyzer');
+const Analyzer = require('../analyzer');
+
 const queue = require('../main-queue');
 const timer = require('../timer');
 const history = require('../all-history');
 const resultsProcessor = require('../results-processor');
 
 describe('analyzer', () => {
+  let analyzer;
+  const results = { info: [{ score: { value: 10 } }] };
+  const engine = { analyzeToDepth: () => (results), setUciOptions: () => {} };
+  const uciOptions = [{ name: 'Threads', value: 3 }, { name: 'Hash', value: 4096 }];
+  const task = { fen: 'some', depth: 100, pingUrl: 'http://some.url' };
+
+  beforeEach(() => {
+    analyzer = new Analyzer();
+    spyOn(Engine.prototype, 'analyzeToDepth').and.callFake(engine.analyzeToDepth);
+  });
+
   describe('push', () => {
-    beforeEach(() => {
-      spyOn(engine.prototype, 'analyzeToDepth').and.stub();
-    });
-    it('asks engine to start analysis', () => {
+    it('asks engine to start analysis', async () => {
       spyOn(queue, 'getFirst').and.returnValue({ fen: 'aaa', depth: 40 });
-
-      analyzer.push();
-
-      expect(engine.prototype.analyzeToDepth).toHaveBeenCalledWith('aaa', 40);
+      await analyzer.push();
+      expect(Engine.prototype.analyzeToDepth).toHaveBeenCalledWith('aaa', 40);
     });
     it('starts timer before evaluation', (done) => {
       spyOn(timer, 'start').and.stub();
@@ -42,23 +49,23 @@ describe('analyzer', () => {
   describe('getCurrentAnalysisTime', () => {
     it('returns time passed from analysis', () => {
       spyOn(timer, 'getTimePassed').and.returnValue(1);
-      expect(analyzer.getCurrentAnalysisTime()).toBe(1);
+      expect(analyzer.currentAnalysisTime).toBe(1);
     });
   });
   describe('getActiveFen', () => {
     it('returns null by default', () => {
-      expect(analyzer.getActiveFen()).toBeNull();
+      expect(analyzer.activeFen).toBeNull();
     });
     it('returns active fen while analyze is in progress', (done) => {
       spyOn(queue, 'getFirst').and.returnValue({ fen: 'prp' });
       const promise = analyzer.analyze();
-      expect(analyzer.getActiveFen()).toBe('prp');
+      expect(analyzer.activeFen).toBe('prp');
       promise.then(done);
     });
     it('returns null if analysis finished', async () => {
       spyOn(queue, 'getFirst').and.returnValue({ fen: 'qkr' });
       await analyzer.analyze();
-      expect(analyzer.getActiveFen()).toBeNull();
+      expect(analyzer.activeFen).toBeNull();
     });
   });
   describe('analyze', () => {
@@ -75,22 +82,18 @@ describe('analyzer', () => {
       spyOn(history, 'add').and.stub();
       spyOn(queue, 'getFirst').and.returnValue({ depth: 50, fen: 'abc' });
       spyOn(timer, 'getTimePassed').and.returnValue(600);
-      spyOn(engine.prototype, 'analyzeToDepth').and.stub();
       await analyzer.analyze();
       expect(history.add).toHaveBeenCalledWith({ depth: 50, time: 600 });
     });
     it('deletes fen from queue after analysis', async () => {
       spyOn(queue, 'getFirst').and.returnValue({ depth: 51, fen: 'b' });
       spyOn(queue, 'delete').and.stub();
-      spyOn(engine.prototype, 'analyzeToDepth').and.returnValue({ bestMove: 'Nf3' });
+      spyOn(engine, 'analyzeToDepth').and.returnValue({ bestMove: 'Nf3' });
       await analyzer.analyze();
       expect(queue.delete).toHaveBeenCalledWith({ fen: 'b' });
     });
     it('process results', (done) => {
-      const results = { info: [{ score: { value: 10 } }] };
-      const task = { fen: 'some', depth: 100, pingUrl: 'http://some.url' };
       spyOn(queue, 'getFirst').and.returnValue(task);
-      spyOn(engine.prototype, 'analyzeToDepth').and.returnValue(Promise.resolve(results));
       spyOn(resultsProcessor, 'process').and.stub();
       analyzer.analyze().then(() => {
         expect(resultsProcessor.process).toHaveBeenCalledWith({ task, results });
@@ -98,6 +101,12 @@ describe('analyzer', () => {
       }).catch((err) => {
         done(err);
       });
+    });
+    it('sets uci options', async () => {
+      spyOn(Engine.prototype, 'setUciOptions').and.stub();
+      spyOn(queue, 'getFirst').and.returnValue(task);
+      await analyzer.analyze();
+      expect(Engine.prototype.setUciOptions).toHaveBeenCalledWith(uciOptions);
     });
   });
 });
