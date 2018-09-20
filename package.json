@@ -1,6 +1,6 @@
 {
   "name": "remote-chess-engine",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)",
   "main": "server.js",
   "bin": "server.js",
@@ -9,6 +9,7 @@
     "tdd": "nodemon --exec jasmine",
     "start": "nodemon server.js",
     "coverage": "istanbul cover node_modules/jasmine/bin/jasmine.js",
+    "tdd-coverage": "nodemon --exec istanbul cover node_modules/jasmine/bin/jasmine.js",
     "e2e": "start node server.js && jasmine ./spec/e2e.js"
   },
   "keywords": [
