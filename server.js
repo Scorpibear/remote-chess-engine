@@ -36,7 +36,7 @@ app.post('/fen', (req, res) => {
   req.on('data', (chunk) => {
     try {
       const data = JSON.parse(chunk);
-      console.log(`POST /fen ${data}`);
+      console.log(`POST /fen ${data.fen} depth ${data.depth} pingUrl ${data.pingUrl}`);
       const queueInfo = queue.add({ fen: data.fen, depth: data.depth, pingUrl: data.pingUrl });
       res.send(queueInfo);
       analyzer.push();
@@ -50,7 +50,7 @@ app.delete('/fen', (req, res) => {
   req.on('data', (chunk) => {
     try {
       const data = JSON.parse(chunk);
-      console.log(`DELETE /fen ${data}`);
+      console.log(`DELETE /fen ${data.fen}`);
       queue.delete(data.fen);
       res.send();
     } catch (err) {

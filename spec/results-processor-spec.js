@@ -4,9 +4,26 @@ const evaluations = require('../all-evaluations');
 const resultsProcessor = require('../results-processor');
 
 describe('resultsProcessor', () => {
+  const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+  const fenW = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2';
+
+  describe('adjustScore', () => {
+    it('leaves 0 as is for black', () => {
+      expect(resultsProcessor.adjustScore(0, fen)).toEqual(0);
+    });
+    it('leaves 0 as is for white', () => {
+      expect(resultsProcessor.adjustScore(0, fenW)).toEqual(0);
+    });
+    it('converts 1 for black into -0.01', () => {
+      expect(resultsProcessor.adjustScore(1, fen)).toEqual(-0.01);
+    });
+    it('converts -1 for white into -0.01', () => {
+      expect(resultsProcessor.adjustScore(-1, fenW)).toEqual(-0.01);
+    });
+  });
   describe('process', () => {
     const pingUrl = 'http://pingurl.com/api/ping';
-    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+    
     const bestMove = 'Nf6';
     const task = { fen, depth: 10, pingUrl };
     const score = -1.23;
@@ -64,6 +81,14 @@ describe('resultsProcessor', () => {
       resultsProcessor.process({ task, results });
       errorCallback({ message: 'invalid url' });
       expect(console.error).toHaveBeenCalled();
+    });
+  });
+  describe('shortenMoveNotation', () => {
+    it('returns the move as is if it could not be converted to san', () => {
+      expect(resultsProcessor.shortenMoveNotation('something strange', fenW)).toEqual('something strange');
+    });
+    it('returns short notation', () => {
+      expect(resultsProcessor.shortenMoveNotation('e4d5', fenW)).toEqual('exd5');
     });
   });
 });

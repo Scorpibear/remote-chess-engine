@@ -35,14 +35,14 @@ module.exports.process = ({ task, results }) => {
 };
 
 module.exports.adjustScore = (scoreInCentipawns, fen) =>
-  scoreInCentipawns * (fenAnalyzer.isBlack(fen) ? -0.01 : 0.01);
+  scoreInCentipawns * ((fenAnalyzer.isBlack(fen) && scoreInCentipawns > 0) ? -0.01 : 0.01);
 
 module.exports.shortenMoveNotation = (move, fen) => {
   try {
     const chess = new Chess(fen);
     return chess.move(move, { sloppy: true }).san;
   } catch (err) {
-    console.error(`Incorrect fen/move combination: fen - '${move}', move - '${fen}'`, err);
+    console.error(`Incorrect move/fen combination: move - '${move}', fen - '${fen}'`, err);
     return move;
   }
 };
