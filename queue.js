@@ -2,7 +2,6 @@ const Serializable = require('./serializable');
 
 class Queue extends Serializable {
   add(newItem) {
-    console.log('adding ', newItem);
     if (newItem.fen && newItem.depth) {
       const placeInQueue = this.data.findIndex(item => (item.fen === newItem.fen));
       if (placeInQueue >= 0) {
@@ -14,6 +13,7 @@ class Queue extends Serializable {
         }
       } else {
         this.data.push(Object.assign({}, newItem));
+        console.log(`'${newItem.fen}' with depth ${newItem.depth} is added to queue`);
         this.emitChangeEvent();
       }
     }
