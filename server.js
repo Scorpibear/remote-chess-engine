@@ -1,5 +1,8 @@
+#!/usr/bin/env node
+
 const config = require('config');
 const express = require('express');
+const fenAnalyzer = require('fen-analyzer');
 
 const Analyzer = require('./analyzer');
 const Estimator = require('./estimator');
@@ -12,7 +15,7 @@ const app = express();
 const port = config.get('port') || 9977;
 serializer.serializeAll();
 
-const analyzer = new Analyzer();
+const analyzer = new Analyzer({ fenAnalyzer });
 const estimator = new Estimator({ analyzer });
 
 app.get('/', (req, res) => {
@@ -71,5 +74,7 @@ const server = app.listen(port);
 Object.assign(server, { analyzer, estimator });
 
 console.log(`remote chess engine started at port ${port}`);
+
+analyzer.push();
 
 module.exports = server;
