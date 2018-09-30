@@ -13,9 +13,10 @@ describe('analyzer', () => {
   const engine = { analyzeToDepth: () => (results), setUciOptions: () => {} };
   const uciOptions = [{ name: 'Threads', value: 3 }, { name: 'Hash', value: 4096 }];
   const task = { fen: 'some', depth: 100, pingUrl: 'http://some.url' };
+  const fenAnalyzer = { getPiecesCount: () => 32 };
 
   beforeEach(() => {
-    analyzer = new Analyzer();
+    analyzer = new Analyzer({ fenAnalyzer });
     spyOn(Engine.prototype, 'analyzeToDepth').and.callFake(engine.analyzeToDepth);
   });
 
@@ -81,9 +82,10 @@ describe('analyzer', () => {
     it('adds to history time spent', async () => {
       spyOn(history, 'add').and.stub();
       spyOn(queue, 'getFirst').and.returnValue({ depth: 50, fen: 'abc' });
+      spyOn(fenAnalyzer, 'getPiecesCount').and.returnValue(18);
       spyOn(timer, 'getTimePassed').and.returnValue(600);
       await analyzer.analyze();
-      expect(history.add).toHaveBeenCalledWith({ depth: 50, time: 600 });
+      expect(history.add).toHaveBeenCalledWith({ depth: 50, time: 600, pieces: 18 });
     });
     it('deletes fen from queue after analysis', async () => {
       spyOn(queue, 'getFirst').and.returnValue({ depth: 51, fen: 'b' });

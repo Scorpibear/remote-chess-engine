@@ -9,7 +9,8 @@ const resultsProcessor = require('./results-processor');
 const PAUSE_BETWEEN_ANALYSIS = 1000; // 1000 miliseconds
 
 class Analyzer {
-  constructor() {
+  constructor({ fenAnalyzer }) {
+    this.fenAnalyzer = fenAnalyzer;
     this.timer = timer;
     this.task = null;
   }
@@ -26,7 +27,11 @@ class Analyzer {
         console.error(err);
       }
       queue.delete({ fen: this.task.fen });
-      history.add({ depth: this.task.depth, time: this.timer.getTimePassed() });
+      history.add({
+        depth: this.task.depth,
+        time: this.timer.getTimePassed(),
+        pieces: this.fenAnalyzer.getPiecesCount(this.task.fen)
+      });
       setTimeout(this.push, PAUSE_BETWEEN_ANALYSIS);
     }
     this.task = null;

@@ -1,5 +1,6 @@
 const config = require('config');
 const fs = require('fs');
+const stringifier = require('smart-stringifier');
 
 const evaluations = require('./all-evaluations');
 const history = require('./all-history');
@@ -17,7 +18,7 @@ module.exports.serialize = (serializable, fileName) => {
     }
     if (serializable.on) {
       serializable.on('change', (data) => {
-        fs.writeFile(fileName, JSON.stringify(data, 2), (err) => {
+        fs.writeFile(fileName, stringifier.stringify(data, 2), (err) => {
           if (err) {
             console.error(`Could not save to '${fileName}':`, err);
           }
