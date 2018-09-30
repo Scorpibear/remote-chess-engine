@@ -7,6 +7,14 @@ Remote Chess Engine
 
 Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)
 
+Install
+--
+>> npm install -g remote-chess-engine
+
+Run
+--
+>> remote-chess-engine
+
 API
 --
 
