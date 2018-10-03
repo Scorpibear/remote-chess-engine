@@ -63,3 +63,6 @@ typings/
 queue.json
 evaluations.json
 history.json
+
+# deployment-dependent files
+local.json
