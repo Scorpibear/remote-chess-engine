@@ -20,10 +20,14 @@ describe('resultsProcessor', () => {
     it('converts -1 for white into -0.01', () => {
       expect(resultsProcessor.adjustScore(-1, fenW)).toEqual(-0.01);
     });
+    it('only 2 digits after decimal point for specific numbers', () => {
+      // based on a real bug as /100 works not the same as *0.01
+      expect(resultsProcessor.adjustScore(57, fen)).toEqual(-0.57);
+      expect(resultsProcessor.adjustScore(166, fenW)).toEqual(1.66);
+    });
   });
   describe('process', () => {
     const pingUrl = 'http://pingurl.com/api/ping';
-    
     const bestMove = 'Nf6';
     const task = { fen, depth: 10, pingUrl };
     const score = -1.23;
