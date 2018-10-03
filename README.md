@@ -11,6 +11,20 @@ Install
 --
 >> npm install -g remote-chess-engine
 
+Configure
+--
+create config/local.json with the following properties, setting valid path and values:
+```json
+{
+  "pathToEngine": "stockfish_9_x64.exe",
+  "uciOptions": [{"name":"Threads", "value":3}, {"name": "Hash", "value": 4096}],
+  "port": 9977,
+  "evaluationsFile": "evaluations.json",
+  "queueFile": "queue.json",
+  "historyFile": "history.json"
+}
+```
+
 Run
 --
 >> remote-chess-engine
