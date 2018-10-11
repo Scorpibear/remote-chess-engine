@@ -17,4 +17,7 @@ describe('As a user', () => {
         depth: 1
       }, done);
   });
+  it('is possible to specify 2 remote engines and 2 POST /fen will go to them', () => {
+
+  });
 });

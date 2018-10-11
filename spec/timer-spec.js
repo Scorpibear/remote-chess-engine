@@ -1,4 +1,4 @@
-const timer = require('../timer');
+const timer = require('../app/timer');
 
 describe('timer', () => {
   describe('getTimePassed', () => {

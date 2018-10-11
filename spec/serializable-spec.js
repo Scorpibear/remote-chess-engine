@@ -1,4 +1,4 @@
-const Serializable = require('../serializable');
+const Serializable = require('../app/serializable');
 
 describe('Serializable', () => {
   let serializable;

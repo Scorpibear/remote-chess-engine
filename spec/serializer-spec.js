@@ -1,7 +1,7 @@
 const config = require('config');
 const fs = require('fs');
 
-const serializer = require('../serializer');
+const serializer = require('../app/serializer');
 
 describe('serializer', () => {
   describe('serialize', () => {

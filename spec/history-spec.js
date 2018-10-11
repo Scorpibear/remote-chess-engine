@@ -1,4 +1,4 @@
-const History = require('../history');
+const History = require('../app/history');
 
 describe('history', () => {
   let history;

@@ -4,7 +4,7 @@ const config = require('config');
 const express = require('express');
 const fenAnalyzer = require('fen-analyzer');
 
-const Analyzer = require('./analyzer');
+const Analyzer = require('./master-analyzer');
 const Estimator = require('./estimator');
 
 const queue = require('./main-queue');

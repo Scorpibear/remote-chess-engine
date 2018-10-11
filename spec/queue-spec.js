@@ -1,4 +1,4 @@
-const Queue = require('../queue');
+const Queue = require('../app/queue');
 
 describe('queue', () => {
   const task = { fen: 'rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', depth: 56 };

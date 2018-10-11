@@ -1,11 +1,11 @@
 const Engine = require('uci-adapter');
 
-const Analyzer = require('../analyzer');
+const Analyzer = require('../app/master-analyzer');
 
-const queue = require('../main-queue');
-const timer = require('../timer');
-const history = require('../all-history');
-const resultsProcessor = require('../results-processor');
+const queue = require('../app/main-queue');
+const timer = require('../app/timer');
+const history = require('../app/all-history');
+const resultsProcessor = require('../app/results-processor');
 
 describe('analyzer', () => {
   let analyzer;
@@ -75,7 +75,7 @@ describe('analyzer', () => {
       spyOn(analyzer, 'push').and.stub();
       spyOn(queue, 'getFirst').and.returnValue({ fen: 'abc', depth: 100 });
       analyzer.analyze().then(() => {
-        expect(global.setTimeout).toHaveBeenCalledWith(analyzer.push, 1000);
+        expect(global.setTimeout).toHaveBeenCalledWith(jasmine.anything(), 1000);
         done();
       });
     });

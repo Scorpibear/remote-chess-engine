@@ -23,8 +23,8 @@ module.exports.process = ({ task, results }) => {
       bestMove,
       score
     });
-    console.log('try to ping on ', task.pingUrl);
     if (task.pingUrl) {
+      console.log(`try to ping on ${task.pingUrl}`);
       http.get(task.pingUrl).on('error', (err) => {
         console.error(`Got error while pinging via '${task.pingUrl}': ${err.message}`);
       });

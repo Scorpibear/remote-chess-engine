@@ -1,7 +1,7 @@
 const http = require('http');
 
-const evaluations = require('../all-evaluations');
-const resultsProcessor = require('../results-processor');
+const evaluations = require('../app/all-evaluations');
+const resultsProcessor = require('../app/results-processor');
 
 describe('resultsProcessor', () => {
   const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';

@@ -1,7 +1,7 @@
 const request = require('supertest');
-const server = require('../server');
-const queue = require('../main-queue');
-const evaluations = require('../all-evaluations');
+const server = require('../app/server');
+const queue = require('../app/main-queue');
+const evaluations = require('../app/all-evaluations');
 
 describe('server', () => {
   const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
