@@ -29,6 +29,8 @@ module.exports.serialize = (serializable, fileName) => {
           }
         });
       });
+    } else {
+      console.error('serializable should allow to subscribe on events');
     }
   }
 };

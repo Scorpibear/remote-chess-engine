@@ -43,6 +43,11 @@ describe('serializer', () => {
       serializer.serialize(null, 'testfile');
       expect(fs.existsSync).not.toHaveBeenCalled();
     });
+    it('logs error if passed object is not serializable', () => {
+      spyOn(console, 'error').and.stub();
+      serializer.serialize({ random: 'object' }, 'filename');
+      expect(console.error).toHaveBeenCalled();
+    });
     it('logs error when error occured during file save', () => {
       spyOn(console, 'error').and.stub();
       spyOn(fs, 'writeFile').and.callFake((filename, data, callback) => { callback('save error'); });
