@@ -54,7 +54,7 @@ app.delete('/fen', (req, res) => {
     try {
       const data = JSON.parse(chunk);
       console.log(`DELETE /fen ${data.fen}`);
-      queue.delete(data.fen);
+      queue.delete(data);
       res.send();
     } catch (err) {
       console.error('DELETE /fen: ', err);

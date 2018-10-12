@@ -102,7 +102,7 @@ describe('server', () => {
         .expect(200)
         .end((err) => {
           if (err) done(err);
-          expect(queue.delete).toHaveBeenCalledWith(fen);
+          expect(queue.delete).toHaveBeenCalledWith({ fen });
           done();
         });
     });
