@@ -1,6 +1,6 @@
 {
   "name": "remote-chess-engine",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)",
   "main": "app/server.js",
   "bin": {
