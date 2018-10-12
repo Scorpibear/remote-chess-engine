@@ -7,7 +7,7 @@ const timer = require('../app/timer');
 const history = require('../app/all-history');
 const resultsProcessor = require('../app/results-processor');
 
-describe('analyzer', () => {
+describe('master analyzer', () => {
   let analyzer;
   const results = { info: [{ score: { value: 10 } }] };
   const engine = { analyzeToDepth: () => (results), setUciOptions: () => {} };
@@ -46,6 +46,12 @@ describe('analyzer', () => {
       expect(analyzer.analyze).not.toHaveBeenCalled();
       promise.then(done);
     });
+    it('logs error if analysis failed', async () => {
+      spyOn(console, 'error').and.stub();
+      spyOn(analyzer, 'analyze').and.returnValue(Promise.reject(new Error('error')));
+      await analyzer.push();
+      expect(console.error).toHaveBeenCalled();
+    });
   });
   describe('getCurrentAnalysisTime', () => {
     it('returns time passed from analysis', () => {
@@ -71,11 +77,12 @@ describe('analyzer', () => {
   });
   describe('analyze', () => {
     it('schedules to run push in a second if queue is not empty', (done) => {
-      spyOn(global, 'setTimeout').and.stub();
+      spyOn(global, 'setTimeout').and.callFake(callback => callback());
       spyOn(analyzer, 'push').and.stub();
       spyOn(queue, 'getFirst').and.returnValue({ fen: 'abc', depth: 100 });
       analyzer.analyze().then(() => {
         expect(global.setTimeout).toHaveBeenCalledWith(jasmine.anything(), 1000);
+        expect(analyzer.push).toHaveBeenCalled();
         done();
       });
     });
@@ -109,6 +116,13 @@ describe('analyzer', () => {
       spyOn(queue, 'getFirst').and.returnValue(task);
       await analyzer.analyze();
       expect(Engine.prototype.setUciOptions).toHaveBeenCalledWith(uciOptions);
+    });
+    it('logs error if analysis failed', async () => {
+      spyOn(console, 'error').and.stub();
+      spyOn(queue, 'getFirst').and.returnValue(task);
+      spyOn(resultsProcessor, 'process').and.throwError('error');
+      await analyzer.analyze();
+      expect(console.error).toHaveBeenCalled();
     });
   });
 });
