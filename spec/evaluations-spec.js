@@ -1,4 +1,4 @@
-const Evaluations = require('../evaluations');
+const Evaluations = require('../app/evaluations');
 
 describe('evaluations', () => {
   const evaluations = new Evaluations();

@@ -1,6 +1,6 @@
-const Estimator = require('../estimator');
+const Estimator = require('../app/estimator');
 
-const history = require('../all-history');
+const history = require('../app/all-history');
 
 describe('estimator', () => {
   let estimator = null;

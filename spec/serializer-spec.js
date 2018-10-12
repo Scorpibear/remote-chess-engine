@@ -1,7 +1,7 @@
 const config = require('config');
 const fs = require('fs');
 
-const serializer = require('../serializer');
+const serializer = require('../app/serializer');
 
 describe('serializer', () => {
   describe('serialize', () => {
@@ -42,6 +42,11 @@ describe('serializer', () => {
       spyOn(fs, 'existsSync');
       serializer.serialize(null, 'testfile');
       expect(fs.existsSync).not.toHaveBeenCalled();
+    });
+    it('logs error if passed object is not serializable', () => {
+      spyOn(console, 'error').and.stub();
+      serializer.serialize({ random: 'object' }, 'filename');
+      expect(console.error).toHaveBeenCalled();
     });
     it('logs error when error occured during file save', () => {
       spyOn(console, 'error').and.stub();

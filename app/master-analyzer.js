@@ -32,7 +32,9 @@ class Analyzer {
         time: this.timer.getTimePassed(),
         pieces: this.fenAnalyzer.getPiecesCount(this.task.fen)
       });
-      setTimeout(this.push, PAUSE_BETWEEN_ANALYSIS);
+      setTimeout(() => {
+        this.push();
+      }, PAUSE_BETWEEN_ANALYSIS);
     }
     this.task = null;
   }

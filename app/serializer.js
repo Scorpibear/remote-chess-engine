@@ -1,6 +1,7 @@
 const config = require('config');
 const fs = require('fs');
 const stringifier = require('smart-stringifier');
+const json5 = require('json5');
 
 const evaluations = require('./all-evaluations');
 const history = require('./all-history');
@@ -11,7 +12,11 @@ module.exports.serialize = (serializable, fileName) => {
     if (fs.existsSync(fileName) && serializable.load) {
       try {
         const data = fs.readFileSync(fileName);
-        serializable.load(JSON.parse(data));
+        try {
+          serializable.load(json5.parse(data));
+        } catch (err) {
+          console.error(`Could not parse ${fileName} content: ${data}`);
+        }
       } catch (err) {
         console.error(`Could not load from '${fileName}':`, err);
       }
@@ -24,6 +29,8 @@ module.exports.serialize = (serializable, fileName) => {
           }
         });
       });
+    } else {
+      console.error('serializable should allow to subscribe on events');
     }
   }
 };

@@ -2,14 +2,18 @@
   "name": "remote-chess-engine",
   "version": "0.6.0",
   "description": "Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)",
-  "main": "server.js",
-  "bin": "server.js",
+  "main": "app/server.js",
+  "bin": {
+    "rce": "app/server.js",
+    "remote-chess-engine": "app/server.js"
+  },
   "scripts": {
     "test": "jasmine",
     "tdd": "nodemon --exec jasmine",
     "start": "nodemon server.js",
-    "coverage": "istanbul cover node_modules/jasmine/bin/jasmine.js",
-    "tdd-coverage": "nodemon --exec istanbul cover node_modules/jasmine/bin/jasmine.js",
+    "coverage": "nyc --reporter=lcov npm test",
+    "tdd-coverage": "nodemon --exec npm run coverage",
+    "report-coverage": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "e2e": "start node server.js && jasmine ./spec/e2e.js"
   },
   "keywords": [
@@ -28,9 +32,9 @@
     "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
-    "istanbul": "^0.4.5",
-    "jasmine": "^2.99.0",
-    "nodemon": "^1.12.1",
+    "jasmine": "^3.2.0",
+    "nodemon": "^1.18.4",
+    "nyc": "^13.0.1",
     "supertest": "^3.0.0"
   },
   "repository": {
@@ -42,12 +46,19 @@
     "config": "^1.30.0",
     "express": "^4.16.2",
     "fen-analyzer": "^0.2.0",
+    "json5": "^2.1.0",
+    "ricpa-client": "^0.2.1",
     "smart-stringifier": "^0.1.0",
     "uci-adapter": "github:Scorpibear/uci-adapter"
   },
   "nodemonConfig": {
     "ignore": [
       "*.json"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "spec/**/*spec.js"
     ]
   }
 }
