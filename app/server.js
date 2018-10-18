@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const config = require('config');
 const express = require('express');
 const fenAnalyzer = require('fen-analyzer');
