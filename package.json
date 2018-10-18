@@ -4,8 +4,8 @@
   "description": "Remote Chess Engine, ready to process position analysis tasks via Remote Interface for Chess Positions Analysis (RICPA)",
   "main": "app/server.js",
   "bin": {
-    "rce": "app/server.js",
-    "remote-chess-engine": "app/server.js"
+    "rce": "bin/rce-cli.js",
+    "remote-chess-engine": "bin/rce-cli.js"
   },
   "scripts": {
     "test": "jasmine",
