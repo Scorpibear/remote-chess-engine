@@ -10,7 +10,7 @@ const resultsProcessor = require('../app/results-processor');
 describe('master analyzer', () => {
   let analyzer;
   const results = { info: [{ score: { value: 10 } }] };
-  const engine = { analyzeToDepth: () => (results), setUciOptions: () => {} };
+  const engine = { analyzeToDepth: () => Promise.resolve(results), setUciOptions: () => {} };
   const uciOptions = [{ name: 'Threads', value: 3 }, { name: 'Hash', value: 4096 }];
   const task = { fen: 'some', depth: 100, pingUrl: 'http://some.url' };
   const fenAnalyzer = { getPiecesCount: () => 32 };
@@ -21,18 +21,6 @@ describe('master analyzer', () => {
   });
 
   describe('push', () => {
-    it('asks engine to start analysis', async () => {
-      spyOn(queue, 'getFirst').and.returnValue({ fen: 'aaa', depth: 40 });
-      await analyzer.push();
-      expect(Engine.prototype.analyzeToDepth).toHaveBeenCalledWith('aaa', 40);
-    });
-    it('starts timer before evaluation', (done) => {
-      spyOn(timer, 'start').and.stub();
-      spyOn(queue, 'getFirst').and.returnValue({ fen: 'aaa', depth: 100 });
-      const promise = analyzer.analyze();
-      expect(timer.start).toHaveBeenCalled();
-      promise.then(done);
-    });
     it('calls analyze if it is not run yet', () => {
       spyOn(analyzer, 'analyze');
       analyzer.push();
@@ -76,6 +64,18 @@ describe('master analyzer', () => {
     });
   });
   describe('analyze', () => {
+    it('asks engine to start analysis', async () => {
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'aaa', depth: 40 });
+      await analyzer.analyze();
+      expect(Engine.prototype.analyzeToDepth).toHaveBeenCalledWith('aaa', 40);
+    });
+    it('starts timer before evaluation', (done) => {
+      spyOn(timer, 'start').and.stub();
+      spyOn(queue, 'getFirst').and.returnValue({ fen: 'aaa', depth: 100 });
+      const promise = analyzer.analyze();
+      expect(timer.start).toHaveBeenCalled();
+      promise.then(done);
+    });
     it('schedules to run push in a second if queue is not empty', (done) => {
       spyOn(global, 'setTimeout').and.callFake(callback => callback());
       spyOn(analyzer, 'push').and.stub();
