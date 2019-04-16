@@ -33,8 +33,8 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "jasmine": "^3.2.0",
-    "nodemon": "^1.18.4",
-    "nyc": "^13.0.1",
+    "nodemon": "^1.18.10",
+    "nyc": "^13.3.0",
     "supertest": "^3.0.0"
   },
   "repository": {
@@ -46,6 +46,7 @@
     "config": "^1.30.0",
     "express": "^4.16.2",
     "fen-analyzer": "^0.2.0",
+    "fen-queue-processor": "^0.5.0",
     "json5": "^2.1.0",
     "ricpa-client": "^0.2.1",
     "smart-stringifier": "^0.1.0",
