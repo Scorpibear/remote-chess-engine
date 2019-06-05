@@ -29,13 +29,13 @@
   "author": "Mikhail Subach",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^4.18.2",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.9.0",
-    "jasmine": "^3.2.0",
-    "nodemon": "^1.18.4",
-    "nyc": "^13.0.1",
-    "supertest": "^3.0.0"
+    "eslint-plugin-import": "^2.17.3",
+    "jasmine": "^3.4.0",
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1",
+    "supertest": "^3.4.2"
   },
   "repository": {
     "type": "git",
@@ -43,8 +43,8 @@
   },
   "dependencies": {
     "chess.js": "^0.10.2",
-    "config": "^1.30.0",
-    "express": "^4.16.2",
+    "config": "^1.31.0",
+    "express": "^4.17.1",
     "fen-analyzer": "^0.2.0",
     "json5": "^2.1.0",
     "ricpa-client": "^0.2.1",
