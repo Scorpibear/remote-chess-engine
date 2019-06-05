@@ -1,3 +1,4 @@
+const fenAnalyzer = require('fen-analyzer');
 const history = require('./all-history');
 
 const defaultTime = 20 * 60; // 20 minutes in seconds
@@ -7,7 +8,8 @@ class Estimator {
     this.analyzer = analyzer;
   }
   estimate({ fen, depth }) {
-    let seconds = history.getMeanTime({ depth }) || defaultTime;
+    const pieces = fenAnalyzer.getPiecesCount(fen);
+    let seconds = history.getMeanTime({ depth, pieces }) || defaultTime;
     if (this.analyzer.activeFen === fen) {
       seconds -= this.analyzer.currentAnalysisTime;
       while (seconds < 0) {
