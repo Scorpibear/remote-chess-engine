@@ -6,7 +6,6 @@
   "queueFile": "queue.json",
   "historyFile": "history.json",
   "remoteEngines": [
-    {"hostname": "localhost", "port": "9978", "path": ""},
-    {"hostname": "localhost", "port": "9979", "path": ""}
+    {"hostname": "localhost", "port": "9978", "path": ""}
   ]
 }
