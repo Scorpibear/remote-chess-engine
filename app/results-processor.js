@@ -35,7 +35,7 @@ module.exports.process = ({ task, results }) => {
 };
 
 module.exports.adjustScore = (scoreInCentipawns, fen) =>
-  scoreInCentipawns / ((fenAnalyzer.isBlack(fen) && scoreInCentipawns > 0) ? -100 : 100);
+  scoreInCentipawns / ((fenAnalyzer.isBlack(fen) && scoreInCentipawns !== 0) ? -100 : 100);
 
 module.exports.shortenMoveNotation = (move, fen) => {
   try {
