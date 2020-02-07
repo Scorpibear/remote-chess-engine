@@ -17,6 +17,9 @@ describe('resultsProcessor', () => {
     it('converts 1 for black into -0.01', () => {
       expect(resultsProcessor.adjustScore(1, fen)).toEqual(-0.01);
     });
+    it('converts -300 for black into +3', () => {
+      expect(resultsProcessor.adjustScore(-300, fen)).toEqual(3);
+    });
     it('converts -1 for white into -0.01', () => {
       expect(resultsProcessor.adjustScore(-1, fenW)).toEqual(-0.01);
     });
