@@ -74,6 +74,7 @@ describe('server', () => {
         });
     });
     it('returns place in queue', (done) => {
+      spyOn(server.analyzer, 'push').and.stub();
       spyOn(queue, 'add').and.returnValue({ placeInQueue: 3 });
       request(server)
         .post('/fen').send({ fen, depth: 40 })
@@ -84,6 +85,7 @@ describe('server', () => {
         });
     });
     it('returns estimated time to analyze', (done) => {
+      spyOn(server.analyzer, 'push').and.stub();
       spyOn(queue, 'add').and.returnValue({ estimatedTime: 1234567 });
       request(server)
         .post('/fen').send({ fen, depth: 5 })
