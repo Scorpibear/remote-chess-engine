@@ -115,6 +115,7 @@ describe('server', () => {
       const queueDataEstimated = [{ fen, depth: 50, estimatedTime: '0:05:34' }];
       spyOn(queue, 'toList').and.returnValue(queueData);
       spyOn(server.estimator, 'estimateQueue').and.returnValue(queueDataEstimated);
+      spyOn(server.analyzer, 'push').and.stub();
       request(server)
         .get('/queue')
         .expect(200)
