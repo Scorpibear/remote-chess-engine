@@ -31,9 +31,9 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.17.3",
-    "jasmine": "^3.4.0",
-    "nodemon": "^1.19.1",
+    "eslint-plugin-import": "^2.22.1",
+    "jasmine": "^3.7.0",
+    "nodemon": "^1.19.4",
     "nyc": "^14.1.1",
     "supertest": "^3.4.2"
   },
@@ -42,12 +42,12 @@
     "url": "https://github.com/Scorpibear/remote-chess-engine.git"
   },
   "dependencies": {
-    "chess.js": "^0.10.2",
+    "chess.js": "^0.10.3",
     "config": "^1.31.0",
     "express": "^4.17.1",
     "fen-analyzer": "^0.2.0",
-    "json5": "^2.1.0",
-    "ricpa-client": "^0.2.1",
+    "json5": "^2.2.0",
+    "ricpa-client": "^0.3.1",
     "smart-stringifier": "^0.1.0",
     "uci-adapter": "github:Scorpibear/uci-adapter"
   },
