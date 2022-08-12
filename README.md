@@ -9,11 +9,12 @@ Remote Chess Engine, ready to process position analysis tasks via Remote Interfa
 
 Install
 --
->> npm install -g remote-chess-engine
+> npm i -g remote-chess-engine
 
 Configure
 --
-create config/local.json with the following properties, setting valid path and values:
+create config/local.json with the following properties, setting valid path and values, e.g.:
+for windows OS:
 ```json
 {
   "pathToEngine": "stockfish_9_x64.exe",
@@ -24,10 +25,31 @@ create config/local.json with the following properties, setting valid path and v
   "historyFile": "history.json"
 }
 ```
+for unix-like OS:
+```json
+{
+  "pathToEngine": "/home/rceuser/stockfish/stockfish",
+  "uciOptions": [{"name":"Threads", "value":2}, {"name": "Hash", "value": 6912}, {"name": "SyzygyPath", "value": "/media/syzygy"}],
+  "port": 9977,
+  "evaluationsFile": "evaluations.json",
+  "queueFile": "queue.json",
+  "historyFile": "history.json"
+}
+
+```
+make sure pathToEngine refered to existent binaries and is an absolute path (no ~/ stuff allowed) and uciOptions are valid for you server. Evaluations, queue and history files could be absent - will be created automatically.
 
 Run
 --
->> remote-chess-engine
+> remote-chess-engine
+
+or for background execution
+> remote-chess-engine &> rce.log &
+
+with
+> tail -f rce.log
+
+to check log at runtime
 
 API
 --
